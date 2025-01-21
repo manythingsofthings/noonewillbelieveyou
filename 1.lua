@@ -88,7 +88,7 @@ if _G.dodconfig.moveset ~= "Y0" and _G.dodconfig.moveset ~= "DE" then
 end
 
 if rep:FindFirstChild("Dragon") then
-	sendNotification("DRAGON STYLE IS ALREADY LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "buzz")
+	sendNotification("SCRIPT IS ALREADY LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "buzz")
 	return
 end
 
@@ -828,7 +828,7 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 		playAnim(moves.H_FallenProne.Anim.AnimationId, "Action4", 1)
 	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Komaki Fist Reversal [Right]" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
-	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Head Press: Prone" and not char:FindFirstChild("BeingHeated") then
+	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Head Press [Prone]" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Might"
 	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Terror" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Hundred Fist Rush"
@@ -838,6 +838,7 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 				Main.HeatMove.TextLabel.Text = "Essence of Weaponry"
 			end
 		end
+	end
 	end
 end)
 
@@ -1234,7 +1235,7 @@ end
 --voice mod
 if _G.dodconfig.voice then
 	if _G.dodconfig.useVoice == "ps2Kiryu" then
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/r2f-ps2kiryu-voice-mod/refs/heads/main/spaghetticode.lua"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/soundshit/refs/heads/main/spaghetticode.lua"))()
 	else
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
 	end
