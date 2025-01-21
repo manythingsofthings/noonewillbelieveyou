@@ -1184,12 +1184,12 @@ local characterToChange = "Your Avatar"
 local characterToChangeTo = "Kiryu Morph"
 
 if _G.dodconfig.morph then
-	_G.Morph = "Legendary Dragon"
+	_G.Morph = _G.useMorph
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
 end
 
 -- Customize playermodel Ignore parts
-if _G.dodconfig.morph and char:FindFirstChild("Ignore") then
+if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and _G.dodconfig.custommorph == "Y5" and char:FindFirstChild("Ignore") then
     local kiryuHairMesh = char.Ignore.FakeHead.Kiryu_Hair.Mesh
     kiryuHairMesh.MeshId = "rbxassetid://14720023616"
     kiryuHairMesh.TextureId = "rbxassetid://14719999915"
