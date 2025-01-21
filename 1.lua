@@ -12,8 +12,8 @@ local configs = {
 	moveset = "Y0",
 	voice = false,
 	useVoice = "Kiryu",
-	morph = false
-	useMorph = "Legendary Dragon"
+	morph = false,
+	useMorph = "Legendary Dragon",
 	custommorph = "R2F"
 }
 
