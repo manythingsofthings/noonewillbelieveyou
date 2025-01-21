@@ -13,6 +13,8 @@ local configs = {
 	voice = false,
 	useVoice = "Kiryu",
 	morph = false
+	useMorph = "Legendary Dragon"
+	custommorph = "R2F"
 }
 
 if _G.dodconfig then
@@ -497,7 +499,7 @@ end
 
 -- feint punch
 local function checkFeint()
-	if char.LockedOn.Value and char.Humanoid.MoveDirection.Z > 0.15 then
+	if not IsInPvp() and char.LockedOn.Value and char.Humanoid.MoveDirection.Z > 0.15 then
 		rush.Strike1.Value = "ParkerDrop"
 	else
 		rush.Strike1.Value = "BStrike5"
@@ -919,7 +921,7 @@ end)
 
 -- extra attacks
 status.AttackBegan.Changed:Connect(function()
-	if status.AttackBegan.Value then
+	if status.AttackBegan.Value and not IsInPvp() then
 		if status.CurrentMove.Value.Name == "B2Strike1" then
 			brawler.Strike1.Value = "B2Strike3"
 			task.delay(.8, function()
@@ -1184,7 +1186,7 @@ local characterToChange = "Your Avatar"
 local characterToChangeTo = "Kiryu Morph"
 
 if _G.dodconfig.morph then
-	_G.Morph = _G.useMorph
+	_G.Morph = "Legendary Dragon"
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
 end
 
