@@ -511,7 +511,10 @@ char.ChildAdded:Connect(
 end)
 
 -- hacts
-addMove("H_Stunned", "Brawler", "H_GUltimateEssence")
+if not IsInPvp() then
+	addMove("H_Stunned", "Brawler", "H_GUltimateEssence")
+end
+
 addMove("H_GrabStanding", "Brawler", "H_HeadPress")
 addMove("H_Standing", "Shotgun", styles.SMG.H_Standing.Value)
 addMove("H_Standing", "SMG", styles.Pistol.H_Standing.Value)
