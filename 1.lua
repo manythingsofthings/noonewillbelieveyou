@@ -857,7 +857,6 @@ end)
 
 -- style switching stuff
 Main.GUY.GUY.Size = UDim2.new(1, 0, 1, 0)
-interf.Battle.ImageTransparency = 1
 
 local function styleswitch()
 	local styleText = Main.StyleBar.amount.Text
