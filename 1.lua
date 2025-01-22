@@ -1023,7 +1023,7 @@ local function updateAbil()
 		end
 	end
 
-	abil.Tabs.Tabs.Brawler.Filled.Title.Text = "Dragon / " .. bName
+	abil.Tabs.Tabs.Brawler.Filled.Title.Text = bName
 	abil.Tabs.Tabs.Rush.Filled.Title.Text = "Rush"
 	abil.Tabs.Tabs.Beast.Filled.Title.Text = "Beast"
 	
