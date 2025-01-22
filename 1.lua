@@ -865,7 +865,12 @@ local function styleswitch()
 	guyImage.ClipsDescendants = false
 
 	if status.Style.Value == "Brawler" then
-		guyImage.Image = "rbxassetid://135574919492817"
+		if _G.dodconfig.movset == "DE" then
+			guyImage.Image = "rbxassetid://135574919492817"
+		else
+			guyImage.Image = "rbxassetid://77002058287348"
+		end
+		
 		brawler.Color.Value = Color3.fromRGB(74, 94, 205)
 	elseif status.Style.Value == "Rush" then
 		guyImage.Image = "rbxassetid://104601719368210"
