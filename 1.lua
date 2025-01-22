@@ -601,6 +601,9 @@ if bName == "Ouryu" then
 	moves["BTStrike4"].HitboxLocations.Value = moves["龍Attack4"].HitboxLocations.Value
 end
 
+moves["BTStrike2"].Anim.AnimationId = moves["BStrike4"].TurnAnim.AnimationId
+moves["BTStrike2"].HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
+moves.BTStrike2.AniSpeed.Value = 1.15
 moves["CounterHook"].Anim.AnimationId = moves.BEvadeStrikeForward.Anim.AnimationId
 moves["龍Strike5"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike2"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
