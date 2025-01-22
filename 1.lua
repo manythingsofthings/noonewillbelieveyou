@@ -919,10 +919,14 @@ rds:GetPropertyChangedSignal("Value"):Connect(function()
 			speed = 2
 		end
 		char.HumanoidRootPart.Anchored = true
-		rep.IsELO.Value = true
+		if not IsInPvp() then
+			rep.IsELO.Value = true
+		end
 		playAnim(anim, "Action4", speed, .75)
 		task.wait(.75)
-		rep.IsELO.Value = false
+		if not IsInPvp() then
+			rep.IsELO.Value = false
+		end
 		char.HumanoidRootPart.Anchored = false
 	end
 end)
