@@ -8,25 +8,6 @@ else
 	bName = "Ouryu"
 end
 
-local configs = {
-	moveset = "Y0",
-	voice = false,
-	useVoice = "Kiryu",
-	morph = false,
-	useMorph = "Legendary Dragon",
-	custommorph = "R2F"
-}
-
-if _G.dodconfig then
-	for i, v in ipairs(configs) do
-		if not _G.dodconfig[i] then
-			_G.dodconfig[i] = v
-		end
-	end
-else
-	_G.dodconfig = configs
-end
-
 local ME = rep.Events.ME
 local styles = rep.Styles
 local rush = styles.Rush
@@ -424,9 +405,6 @@ rush.VisualName.Value = "Rush"
 beast.VisualName.Value = "Beast"
 brawler.VisualName.Value = bName
 
---style colors
-brawler.Color.Value = Color3.fromRGB(74, 94, 205)
-
 -- rush combos
 -- brawler.StanceStrike.Value = "龍GTigerDrop"
 if bName == "Ouryu" then
@@ -439,8 +417,8 @@ else
 end
 	
 
-rush.Rush6.Value = "BAttack4"
-rush.Rush7.Value = "龍Attack4"
+rush.Rush6.Value = "龍Attack4"
+rush.Rush7.Value = "BAttack4"
 
 --finishing blows
 brawler.EvadeStrikeB.Value = "RDashAttack"
@@ -592,6 +570,11 @@ moves.BTStrike4.HSize.Value = moves["龍TigerDrop"].HSize.Value
 moves.BTStrike4.SF.Value = 0
 moves.BTStrike4.MoveForward.Value = 12
 
+moves["BTStrike2"].Anim.AnimationId = moves["BStrike4"].TurnAnim.AnimationId
+moves.BTStrike2.AniSpeed.Value = 1.15
+moves.BTStrike2.HitDur.Value = moves["BStrike4"].HitDur.Value
+moves.BTStrike2.HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
+
 if bName == "Ouryu" then
 	moves["BStrike4"].Anim.AnimationId = moves["BStrike4"].TurnAnim.AnimationId
 	moves["BStrike4"].HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
@@ -601,9 +584,6 @@ if bName == "Ouryu" then
 	moves["BTStrike4"].HitboxLocations.Value = moves["龍Attack4"].HitboxLocations.Value
 end
 
-moves["BTStrike2"].Anim.AnimationId = moves["BStrike4"].TurnAnim.AnimationId
-moves["BTStrike2"].HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
-moves.BTStrike2.AniSpeed.Value = 1.15
 moves["CounterHook"].Anim.AnimationId = moves.BEvadeStrikeForward.Anim.AnimationId
 moves["龍Strike5"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike2"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
@@ -796,7 +776,7 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 		Main.HeatMove.TextLabel.Text = newText
 	end
 	
-	if Main.HeatMove.TextLabel.Text == "Essence of Frenzy" then
+	if Main.HeatMove.TextLabel.Text == "Essence of Frenzy" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Extreme Rush"
 		playAnim(moves["H_Tonfa"].Anim.AnimationId, "Action4", 1)
 		PlaySound("Slap")
@@ -807,12 +787,10 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 		end
 		PlaySound("MassiveSlap")
 	elseif Main.HeatMove.TextLabel.Text == "Ultimate Essence" then
-		if bName == "Ouryu" and not char:FindFirstChild("BeingHeated") then
+		if _G.dodconfig.moveset == "DE" and not char:FindFirstChild("BeingHeated") then
 			Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
 			yinglong.Transparency = .5
 			playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
-		if bName == "Brawler" and not char:FindFirstChild("BeingHeated") then
-			Main.HeatMove.TextLabel.Text = "Ultimate Essence '88"
 		elseif char:FindFirstChild("BeingHeated") then
 			Main.HeatMove.TextLabel.Text = "Essence of Desperation"
 			playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", .7, .9)
@@ -827,23 +805,20 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 		Main.HeatMove.TextLabel.Text = "Essence of Rolling "
 		task.wait(0.5)
 		playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", 1)
-	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Crushing" and not char:FindFirstChild("BeingHeated") then
+	elseif Main.HeatMove.TextLabel.Text == "Essence of Crushing" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
 		task.wait(0.5)
 		playAnim(moves.H_FallenProne.Anim.AnimationId, "Action4", 1)
-	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Komaki Fist Reversal [Right]" and not char:FindFirstChild("BeingHeated") then
+	elseif Main.HeatMove.TextLabel.Text == "Komaki Fist Reversal [Right]" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
-	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Head Press [Prone]" and not char:FindFirstChild("BeingHeated") then
+	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Head Press: Prone" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Might"
-	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Terror" and not char:FindFirstChild("BeingHeated") then
-		Main.HeatMove.TextLabel.Text = "Essence of Hundred Fist Rush"
 	elseif Main.HeatMove.TextLabel.Text == "Essence of Beatdown" and not char:FindFirstChild("BeingHeated") then
 		for _, p in ipairs(char:GetChildren()) do
 			if string.find(p.Name, "wep_") or string.find(p.Name, "prop_") then
 				Main.HeatMove.TextLabel.Text = "Essence of Weaponry"
 			end
 		end
-	end
 	end
 end)
 
@@ -867,13 +842,7 @@ local function styleswitch()
 	guyImage.ClipsDescendants = false
 
 	if status.Style.Value == "Brawler" then
-		if _G.dodconfig.movset == "DE" then
-			guyImage.Image = "rbxassetid://135574919492817"
-		else
-			guyImage.Image = "rbxassetid://77002058287348"
-		end
-		
-		brawler.Color.Value = Color3.fromRGB(74, 94, 205)
+		guyImage.Image = "rbxassetid://135574919492817"
 	elseif status.Style.Value == "Rush" then
 		guyImage.Image = "rbxassetid://104601719368210"
 	elseif status.Style.Value == "Beast" then
@@ -918,14 +887,10 @@ rds:GetPropertyChangedSignal("Value"):Connect(function()
 			speed = 2
 		end
 		char.HumanoidRootPart.Anchored = true
-		if not IsInPvp() then
-			rep.IsELO.Value = true
-		end
+		rep.IsELO.Value = true
 		playAnim(anim, "Action4", speed, .75)
 		task.wait(.75)
-		if not IsInPvp() then
-			rep.IsELO.Value = false
-		end
+		rep.IsELO.Value = false
 		char.HumanoidRootPart.Anchored = false
 	end
 end)
@@ -990,7 +955,9 @@ end)
 
 char.ChildAdded:Connect(function(c)
 	if c.Name == 'Grabbing' and rds.Value then
-		UseHeatAction("T_龍FinishingHold3", "Brawler", {c.Value.HumanoidRootPart})
+		UseHeatAction("T_龍FinishingHold3", "Brawler", {
+			c.Value.HumanoidRootPart
+		})
 	end
 end)
 
@@ -1026,7 +993,7 @@ local function updateAbil()
 		end
 	end
 
-	abil.Tabs.Tabs.Brawler.Filled.Title.Text = bName
+	abil.Tabs.Tabs.Brawler.Filled.Title.Text = "Dragon / " .. bName
 	abil.Tabs.Tabs.Rush.Filled.Title.Text = "Rush"
 	abil.Tabs.Tabs.Beast.Filled.Title.Text = "Beast"
 	
@@ -1201,48 +1168,76 @@ if _G.dodconfig.morph then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
 end
 
--- Customize playermodel Ignore parts
 if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and _G.dodconfig.custommorph == "Y5" and char:FindFirstChild("Ignore") then
-    local kiryuHairMesh = char.Ignore.FakeHead.Kiryu_Hair.Mesh
-    kiryuHairMesh.MeshId = "rbxassetid://14720023616"
-    kiryuHairMesh.TextureId = "rbxassetid://14719999915"
-    kiryuHairMesh.Offset = Vector3.new(0, -0.25, 0.15)
+	local kiryuHairMesh = char.Ignore.FakeHead.Kiryu_Hair.Mesh
+	kiryuHairMesh.MeshId = "rbxassetid://14720023616"
+	kiryuHairMesh.TextureId = "rbxassetid://14719999915"
+	kiryuHairMesh.Offset = Vector3.new(0, - 0.25, 0.15)
+	
+	local darkGrey = BrickColor.new("Dark grey")
+	local black = BrickColor.new("Black")
+	local white = BrickColor.new("White")
 
-    -- Define reusable variables and functions
-    local darkGrey = BrickColor.new("Dark grey")
-    local black = BrickColor.new("Black")
-    local white = BrickColor.new("White")
+	for _, part in ipairs(char:GetChildren()) do
+		if part:IsA("MeshPart") then
+			if string.match(part.Name, "Arm") or part.Name == "UpperTorso" then
+				part.BrickColor = darkGrey
+			elseif not string.match(part.Name, "Hand") and part.Name ~= "Head" then
+				part.BrickColor = black
+			end
+		end
+	end
 
-    -- Update colors for MeshParts based on their names
-    for _, part in ipairs(char:GetChildren()) do
-        if part:IsA("MeshPart") then
-            if string.match(part.Name, "Arm") or part.Name == "UpperTorso" then
-                part.BrickColor = darkGrey
-            elseif not string.match(part.Name, "Hand") and part.Name ~= "Head" then
-                part.BrickColor = black
-            end
-        end
-    end
+	local colorUpdates = {
+		{
+			char.Ignore.FakeUpperTorso.Kiryu_Skin,
+			white
+		},
+		{
+			char.Ignore.FakeUpperTorso.Kiryu_Suit,
+			darkGrey
+		},
+		{
+			char.Ignore.FakeLowerTorso.Kiryu_Tail,
+			darkGrey
+		},
+		{
+			char.Ignore.FakeLeftLowerArm.Suit_CuffL,
+			darkGrey
+		},
+		{
+			char.Ignore.FakeRightLowerArm.Suit_CuffR,
+			darkGrey
+		},
+		{
+			char.Ignore.FakeLeftLowerArm.Suit_CuffSL,
+			darkGrey
+		},
+		{
+			char.Ignore.FakeRightLowerArm.Suit_CuffSR,
+			darkGrey
+		},
+		{
+			char.Ignore.FakeUpperTorso.Kiryu_Shirt,
+			black
+		},
+		{
+			char.Ignore.FakeLowerTorso.Kiryu_BeltLoop,
+			black
+		},
+		{
+			char.Ignore.FakeLeftLowerLeg.Suit_PantL,
+			black
+		},
+		{
+			char.Ignore.FakeRightLowerLeg.Suit_PantR,
+			black
+		},
+	}
 
-    -- Create a table for specific BrickColor assignments
-    local colorUpdates = {
-        {char.Ignore.FakeUpperTorso.Kiryu_Skin, white},
-        {char.Ignore.FakeUpperTorso.Kiryu_Suit, darkGrey},
-        {char.Ignore.FakeLowerTorso.Kiryu_Tail, darkGrey},
-        {char.Ignore.FakeLeftLowerArm.Suit_CuffL, darkGrey},
-        {char.Ignore.FakeRightLowerArm.Suit_CuffR, darkGrey},
-        {char.Ignore.FakeLeftLowerArm.Suit_CuffSL, darkGrey},
-        {char.Ignore.FakeRightLowerArm.Suit_CuffSR, darkGrey},
-        {char.Ignore.FakeUpperTorso.Kiryu_Shirt, black},
-        {char.Ignore.FakeLowerTorso.Kiryu_BeltLoop, black},
-        {char.Ignore.FakeLeftLowerLeg.Suit_PantL, black},
-        {char.Ignore.FakeRightLowerLeg.Suit_PantR, black},
-    }
-
-    -- Apply BrickColor updates
-    for _, update in ipairs(colorUpdates) do
-        update[1].BrickColor = update[2]
-    end
+	for _, update in ipairs(colorUpdates) do
+		update[1].BrickColor = update[2]
+	end
 end
 
 --voice mod
