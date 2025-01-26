@@ -1,3 +1,18 @@
+_G.dodconfig = {
+	moveset = "Y0",
+	-- moveset for Brawler Style. (Y0/DE)
+	
+	voice = true,
+	useVoice = "ps2Kiryu",
+	-- voice mod + which voice (also includes ps2Kiryu)
+  
+	morph = true, -- morph mod
+	useMorph = "Legendary Dragon",
+	custommorph = "Y5",
+	-- custom morph (only for kiryu, only Y5 for now)
+	-- set to anything else to disable
+}
+
 local rep = game.ReplicatedStorage
 local plr = game.Players.LocalPlayer
 
@@ -515,7 +530,7 @@ addMove("H_Standing", "SMG", styles.Pistol.H_Standing.Value)
 addMove("H_Standing", "Rifle", styles.Pistol.H_Standing.Value)
 addMove("H_Standing", "Holding", "H_FallenBeatdown")
 addMove("H_Standing", "OneHandedHolding", "H_FallenBeatdown")
-addMove("H_Fallen", "Holding", styles.OneHandedHolding.H_Fallen.Value
+addMove("H_Fallen", "Holding", styles.OneHandedHolding.H_Fallen.Value)
 
 brawler.H_Distanced:Destroy()
 brawler.H_Running4:Destroy()
