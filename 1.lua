@@ -434,7 +434,7 @@ rush.Strike8.Value = "BTStrike2"
 rush.Strike9.Value = "BTStrike2"
 
 rush.EvadeStrikeL.Value = "BEvadeStrikeLeft"
-rush.EvadeStrikeB.Value = "RDashAttack"
+rush.EvadeStrikeB.Value = "ParkerDrop"
 rush.EvadeStrikeF.Value = "FPunch1"
 rush.EvadeStrikeR.Value = "BEvadeStrikeRight"
 
@@ -520,6 +520,8 @@ rush.H_Running4.Parent = dragon
 brawler.H_Distanced:Destroy()
 
 addMove("H_EvadedF", "Brawler", "H_Escape")
+
+styles.BatHolding.H_Standing.Value = "H_SluggerBat"
 
 --move anims i'm not fucking organizing these
 local rushAnims = {
@@ -1131,7 +1133,6 @@ addMove("H_Stunned", "Brawler", "H_GUltimateEssence")
 
 game:GetService("RunService").RenderStepped:Connect(
 	function()
-	checkFeint()
 	updateAbil()
 	change_color()
 	styleswitch()
