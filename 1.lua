@@ -459,7 +459,8 @@ else
 end
 
 -- misc. moves
-addMove("GrabStrike", "Brawler", "T_龍GParry")
+addMove("GrabStrike", "Brawler", "T_FinishingHold1")
+addMove("DashAttack", "Brawler", "龍2Strike4")
 rush.Grab.Value = "BStomp"
 rush.DashAttack.Value = "龍2Strike1"
 beast.Grab.Value = "Grab"
@@ -635,6 +636,8 @@ moves["HueDrop"].ForceSF.Value = 0
 
 moves["BStrike1"].TurnAnim:Clone().Parent = moves["龍Strike1"]
 moves["BStrike1"].THitboxLocations:Clone().Parent = moves["龍Strike1"]
+
+moves.BStrike4.ComboAt:Clone().Parent = moves.DashAttack
 
 moves.GAttack3.SF:Clone().Parent = moves["龍2Strike2"]
 
@@ -845,7 +848,11 @@ local function styleswitch()
 	guyImage.ClipsDescendants = false
 
 	if status.Style.Value == "Brawler" then
-		guyImage.Image = "rbxassetid://135574919492817"
+		if _G.dodconfig.moveset == "Y0" then
+			guyImage.Image = "rbxassetid://77002058287348"
+		else
+			guyImage.Image = "rbxassetid://108063383518240"
+		end
 	elseif status.Style.Value == "Rush" then
 		guyImage.Image = "rbxassetid://104601719368210"
 	elseif status.Style.Value == "Beast" then
@@ -921,9 +928,9 @@ status.AttackBegan.Changed:Connect(function()
 			task.delay(.8, function()
 				brawler.Strike1.Value = "龍Strike1"
 			end)
-		elseif status.CurrentMove.Value.Name == "DashAttack" then
+		elseif status.CurrentMove.Value.Name == "DashAttack" and status.Style.Value == "Brawler" then
 			brawler.Strike1.Value = "RSweep"
-			task.delay(.8, function()
+			task.delay(3, function()
 				brawler.Strike1.Value = "龍Strike1"
 			end)
 		elseif status.CurrentMove.Value.Name == "BTCounter" then
@@ -996,7 +1003,7 @@ local function updateAbil()
 		end
 	end
 
-	abil.Tabs.Tabs.Brawler.Filled.Title.Text = "Dragon / " .. bName
+	abil.Tabs.Tabs.Brawler.Filled.Title.Text = bName
 	abil.Tabs.Tabs.Rush.Filled.Title.Text = "Rush"
 	abil.Tabs.Tabs.Beast.Filled.Title.Text = "Beast"
 	
@@ -1013,6 +1020,11 @@ local function updateAbil()
 		elseif v.Name == "Guru Knockback" then
 			v.Generic.Label.Text = "Komaki Knock Back"
 		elseif v.Name == "Ultimate Essence" then
+			if _G.dodconfig.moveset == "DE" then
+				v.Generic.Label.Text = "Essence of the Dragon God"
+			else
+				v.Generic.Label.Text = "Ultimate Essence '88"
+			end
 			if string.sub(v.Lock.Title.Text, 1, 10) ~= "Need to be" then
 				v.Lock.Title.Text = "Need to unlock Komaki Parry"
 			end
@@ -1246,9 +1258,7 @@ end
 --voice mod
 if _G.dodconfig.voice then
 	if _G.dodconfig.useVoice == "ps2Kiryu" then
-		_G.dodconfig.useVoice = "Kiryu"
-		sendNotification("ps2kiryu *might* be broken???\nreverting to r2f kiryu voice...", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/soundshit/refs/heads/main/spaghetticode.lua"))()
 	else
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
 	end
