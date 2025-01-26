@@ -459,7 +459,7 @@ else
 end
 
 -- misc. moves
-addMove("GrabStrike", "Brawler", "T_FinishingHold1")
+addMove("GrabStrike", "Brawler", "T_龍GParry")
 addMove("DashAttack", "Brawler", "龍2Strike4")
 rush.Grab.Value = "BStomp"
 rush.DashAttack.Value = "龍2Strike1"
@@ -474,15 +474,6 @@ for i = 1, 4 do
 	Hitbox.Name = "THitboxLocations"
 	Hitbox.Parent = moves["龍Attack" .. i]
 	Hitbox.Value = moves["BAttack" .. i].THitboxLocations.Value
-end
-
--- feint punch
-local function checkFeint()
-	if not IsInPvp() and char.LockedOn.Value and char.Humanoid.MoveDirection.Z > 0.15 then
-		rush.Strike1.Value = "ParkerDrop"
-	else
-		rush.Strike1.Value = "BStrike5"
-	end
 end
 
 -- headbutt
@@ -524,14 +515,6 @@ addMove("H_Standing", "Holding", "H_FallenBeatdown")
 addMove("H_Standing", "OneHandedHolding", "H_FallenBeatdown")
 addMove("H_Fallen", "Holding", styles.OneHandedHolding.H_Fallen.Value)
 
-for _, val in ipairs(rush:GetChildren()) do
-	if string.match(val.Name, "H_Evaded") then
-		val.Parent = brawler
-	elseif string.match(val.Name, "SpinCounter") then
-		val:Destroy()
-	end
-end
-
 rush.H_Running4.Parent = dragon
 
 brawler.H_Fallen.Value = "H_FallenKick"
@@ -539,7 +522,7 @@ brawler.H_EvadedR.Value = "H_FrenzySpinCounter"
 brawler.H_EvadedF.Value = "H_TSpinCounterRight"
 brawler.H_Distanced:Destroy()
 
-styles.BatHolding.H_Standing.Value = "H_SluggerBat"
+addMove("H_EvadedF", "Brawler", "H_Escape")
 
 --move anims i'm not fucking organizing these
 local rushAnims = {
@@ -593,7 +576,6 @@ moves["龍Strike5"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike2"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike4"].Anim.AnimationId = moves.TigerDrop.Anim.AnimationId
 moves["FPunch1"].Anim.AnimationId = "rbxassetid://11464955887"
-moves["HueDrop"].Anim.AnimationId = "rbxassetid://11464955887"
 moves["龍Strike1"].Anim.AnimationId = moves.BStomp.Anim.AnimationId
 moves["龍2Strike4"].Anim.AnimationId = moves.RPunch7.Anim.AnimationId
 moves["BStrike5"].Anim.AnimationId = moves["龍2Strike1"].Anim.AnimationId
@@ -629,15 +611,13 @@ moves["BEvadeStrikeLeft"].HitboxLocations.Value = moves.BAttack2.HitboxLocations
 moves["BEvadeStrikeRight"].HitboxLocations.Value = moves.BAttack1.HitboxLocations.Value
 moves["龍TigerDrop"].HSize.Value = moves["龍GTigerDrop"].HSize.Value
 moves["BStrike5"].AniSpeed.Value = moves["BStrike5"].AniSpeed.Value + 0.05
-
-moves["龍GTigerDrop"].HSize.Value = 0
-
-moves["HueDrop"].ForceSF.Value = 0
-
 moves["BStrike1"].TurnAnim:Clone().Parent = moves["龍Strike1"]
 moves["BStrike1"].THitboxLocations:Clone().Parent = moves["龍Strike1"]
 
 moves.BStrike4.ComboAt:Clone().Parent = moves.DashAttack
+
+moves.B2Strike3.Trail.Value = "RightFoot"
+moves.BTStrike4.Trail.Value = "RightFoot"
 
 moves.GAttack3.SF:Clone().Parent = moves["龍2Strike2"]
 
@@ -656,31 +636,8 @@ moves["GAttack2"].Anim.AnimationId = "rbxassetid://7546691847"
 local combo = Instance.new("StringValue", moves.B2Strike2)
 combo.Value = moves.BStrike3.ComboAt.Value
 combo.Name = "ComboAt"
-moves["GAttack2"].SF.Value = moves.GAttack2.MoveDuration.Value
 
 moves["龍Strike5"].ComboAt:Clone().Parent = moves.B2Strike1
-
-moves["H_FastFootworkBack"].Closest.Value = "40"
-local wn = Instance.new("StringValue", moves["H_FastFootworkBack"])
-wn.Name = "Within"
-wn.Value = "15"
-
-Instance.new("Folder", moves.TigerDrop).Name = "WhenBlocked"
-
-status.Style.Changed:Connect(
-	function()
-	if status.Style.Value == "Brawler" then
-		if moves["H_FastFootworkBack"]:FindFirstChild("Within") then
-			moves["H_FastFootworkBack"]:FindFirstChild("Within"):Destroy()
-			moves["H_FastFootworkBack"].Closest.Value = "15"
-		end
-	elseif status.Style.Value == "Rush" then
-		if moves["H_FastFootworkBack"]:FindFirstChild("Within") then
-			moves["H_FastFootworkBack"]:FindFirstChild("Within"):Destroy()
-			moves["H_FastFootworkBack"].Closest.Value = "15"
-		end
-	end
-end)
 
 -- heat aura
 local function change_color()
@@ -902,6 +859,9 @@ rds:GetPropertyChangedSignal("Value"):Connect(function()
 		task.wait(.75)
 		rep.IsELO.Value = false
 		char.HumanoidRootPart.Anchored = false
+		addMove("GrabStrike", "Brawler", "T_FinishingHold1")
+	else
+		addMove("GrabStrike", "Brawler", "T_龍GParry")
 	end
 end)
 
@@ -953,6 +913,12 @@ plr.ChildRemoved:Connect(function(c)
 		if status:FindFirstChild("Invulnerable") then
 			status.Invulnerable:Destroy()
 		end
+	end
+end)
+
+char.ChildAdded:Connect(function(c)
+	if c.Name == 'Grabbing' and angry() then
+		UseHeatAction("T_BeastToss", "Brawler", {c.Value.HumanoidRootPart})
 	end
 end)
 
