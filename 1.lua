@@ -517,9 +517,6 @@ addMove("H_Fallen", "Holding", styles.OneHandedHolding.H_Fallen.Value)
 
 rush.H_Running4.Parent = dragon
 
-brawler.H_Fallen.Value = "H_FallenKick"
-brawler.H_EvadedR.Value = "H_FrenzySpinCounter"
-brawler.H_EvadedF.Value = "H_TSpinCounterRight"
 brawler.H_Distanced:Destroy()
 
 addMove("H_EvadedF", "Brawler", "H_Escape")
