@@ -508,16 +508,17 @@ if not IsInPvp() then
 end
 
 addMove("H_GrabStanding", "Brawler", "H_HeadPress")
+addMove("H_EvadedF", "Rush", "H_TSpinCounterFront")
+addMove("H_EvadedR", "Rush", "H_FrenzySpinCounter")
 addMove("H_Standing", "Shotgun", styles.SMG.H_Standing.Value)
 addMove("H_Standing", "SMG", styles.Pistol.H_Standing.Value)
 addMove("H_Standing", "Rifle", styles.Pistol.H_Standing.Value)
 addMove("H_Standing", "Holding", "H_FallenBeatdown")
 addMove("H_Standing", "OneHandedHolding", "H_FallenBeatdown")
-addMove("H_Fallen", "Holding", styles.OneHandedHolding.H_Fallen.Value)
-
-rush.H_Running4.Parent = dragon
+addMove("H_Fallen", "Holding", styles.OneHandedHolding.H_Fallen.Value
 
 brawler.H_Distanced:Destroy()
+brawler.H_Running4:Destroy()
 
 addMove("H_EvadedF", "Brawler", "H_Escape")
 
