@@ -1223,6 +1223,8 @@ end
 --voice mod
 if _G.dodconfig.voice then
 	if _G.dodconfig.useVoice == "ps2Kiryu" then
+		_G.dodconfig.useVoice = "Kiryu"
+		sendNotification("PS2 voice is broken. I fucking hate my life.\nReverting to R2F Kiryu voice...")
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/soundshit/refs/heads/main/spaghetticode.lua"))()
 	else
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
