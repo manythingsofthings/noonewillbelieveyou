@@ -1121,6 +1121,7 @@ moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://12120052426"
 moves["龍GTigerDrop"].Anim.AnimationId = moves.BAttack3.Anim.AnimationId
 respawn()
 moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://11464955887"
+loadstring(game:HttpGet("https://pastebin.com/raw/Kj3yLT0H"))()
 
 local alrRun = Instance.new("Folder", rep)
 alrRun.Name = "Dragon"
@@ -1143,7 +1144,7 @@ local characterToChange = "Your Avatar"
 local characterToChangeTo = "Kiryu Morph"
 
 if _G.dodconfig.morph then
-	_G.Morph = "Legendary Dragon"
+	_G.Morph = _g.dodconfig.useMorph
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
 end
 
@@ -1222,7 +1223,7 @@ end
 --voice mod
 if _G.dodconfig.voice then
 	if _G.dodconfig.useVoice == "ps2Kiryu" then
-		_G.dodconfig.useVoice = "Kiryu"		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/soundshit/refs/heads/main/spaghetticode.lua"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/soundshit/refs/heads/main/spaghetticode.lua"))()
 	else
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
 	end
