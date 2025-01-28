@@ -1121,7 +1121,6 @@ moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://12120052426"
 moves["龍GTigerDrop"].Anim.AnimationId = moves.BAttack3.Anim.AnimationId
 respawn()
 moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://11464955887"
-loadstring(game:HttpGet("https://pastebin.com/raw/Kj3yLT0H"))()
 
 local alrRun = Instance.new("Folder", rep)
 alrRun.Name = "Dragon"
