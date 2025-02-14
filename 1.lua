@@ -76,8 +76,8 @@ if rep:FindFirstChild("Dragon") then
 end
 
 if not _G.dodconfig.rushMoveset then
+	sendNotification("_G.dodconfig.rushMoveset not found,\nsetting to Y0...", Color3.new(1, 1, 1), Color3.new(0, 0, 0), "buzz")
 	_G.dodconfig.rushMoveset = "Y0"
-	sendNotification("_G.dodconfig.rushMoveset not found,\nset to Y0 as default.", Color3.new(1, 0, 0), Color3.new(0, 0, 0))	
 end
 
 --replace move
@@ -410,6 +410,7 @@ for _, style in ipairs(styles:GetChildren()) do
 end
 
 if _G.dodconfig.rushMoveset == "7G" then
+	rush.Idle.AnimationId = styles.Tonfa.StanceIdle.AnimationId
 	rush.Run.AnimationId = "http://www.roblox.com/asset/?id=10921320299"
 end
 
@@ -491,7 +492,7 @@ end
 brawler.EvadeStrikeB.Value = "RDashAttack"
 
 if _G.dodconfig.rushMoveset == "7G" then
-	rush.Strike1.Value = "FPunch1"
+	rush.Strike1.Value = "BTStrike1"
 	rush.Strike2.Value = "龍Strike5"
 	rush.Strike3.Value = "BStrike3"
 	rush.Strike4.Value = "龍Strike5"
@@ -587,6 +588,7 @@ if not IsInPvp() then
 end
 
 addMove("H_GrabStanding", "Brawler", "H_HeadPress")
+addMove("StanceStrike", "Brawler", "TigerDrop")
 addMove("H_EvadedF", "Rush", "H_TSpinCounterRight")
 addMove("H_EvadedR", "Rush", "H_FrenzySpinCounter")
 addMove("H_Standing", "Shotgun", styles.SMG.H_Standing.Value)
@@ -650,7 +652,6 @@ if bName == "Ouryu" then
 	moves["BTStrike4"].HitboxLocations.Value = moves["龍Attack4"].HitboxLocations.Value
 end
 
-moves["CounterHook"].Anim.AnimationId = moves.BEvadeStrikeForward.Anim.AnimationId
 moves["龍Strike5"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike2"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike4"].Anim.AnimationId = moves.TigerDrop.Anim.AnimationId
@@ -675,6 +676,7 @@ moves["龍2Strike2"].AniSpeed.Value = 1.45
 moves["龍2Strike4"].AniSpeed.Value = .4
 moves["B2Strike3"].AniSpeed.Value = .8
 moves["龍2Strike2"].MoveDuration.Value = .35
+moves["TigerDrop"].MoveDuration.Value = 0
 moves.BStrike2.ComboAt.Value = moves.BStrike2.ComboAt.Value - 0.15
 moves.BStrike2.MoveForward.Value = moves.BStrike2.MoveForward.Value - 3
 moves["BStrike3"].AniSpeed.Value = moves.BStrike2.AniSpeed.Value + 0.05
@@ -688,14 +690,13 @@ moves["FStrike4"].HitboxLocations.Value = moves.TigerDrop.HitboxLocations.Value
 moves["龍Strike1"].HitboxLocations.Value = moves.BStomp.HitboxLocations.Value
 moves["BEvadeStrikeLeft"].HitboxLocations.Value = moves.BAttack2.HitboxLocations.Value
 moves["BEvadeStrikeRight"].HitboxLocations.Value = moves.BAttack1.HitboxLocations.Value
-moves["龍TigerDrop"].HSize.Value = moves["龍GTigerDrop"].HSize.Value
 moves["BStrike5"].AniSpeed.Value = moves["BStrike5"].AniSpeed.Value + 0.05
 moves["BStrike1"].TurnAnim:Clone().Parent = moves["龍Strike1"]
 moves["BStrike1"].THitboxLocations:Clone().Parent = moves["龍Strike1"]
 
 moves.BStrike4.ComboAt:Clone().Parent = moves.DashAttack
 
-moves.B2Strike3.Trail.Value = "RightFoot"
+moves.B2Strike3.Trail.Value = "LeftFoot"
 moves.BTStrike4.Trail.Value = "RightFoot"
 
 moves.GAttack3.SF:Clone().Parent = moves["龍2Strike2"]
@@ -1114,10 +1115,10 @@ end
 local EnemyHP = pgui.EInterface.EnemyHP
 
 local style1 = pgui.MobileUI.MobileFrame.Left.Buttons.DPad.DPadUp
-style1.TextLabel.Text = bName
+style1.TextLabel.Text = brawler.VisualName.Value
 style1.TextLabel.TextStrokeColor3 = brawler.Color.Value
 
-pgui.MobileUI.MobileFrame.Left.Buttons.DPad.DPadLeft.TextLabel.Text = "Rush"
+pgui.MobileUI.MobileFrame.Left.Buttons.DPad.DPadLeft.TextLabel.Text = rush.VisualName.Value
 pgui.MobileUI.MobileFrame.Left.Buttons.DPad.DPadLeft.TextLabel.TextStrokeColor3 = rush.Color.Value
 pgui.MobileUI.MobileFrame.Left.Buttons.DPad.DPadRight.TextLabel.Text = "Beast"
 pgui.MobileUI.MobileFrame.Left.Buttons.DPad.DPadRight.TextLabel.TextStrokeColor3 = beast.Color.Value
@@ -1205,9 +1206,9 @@ end)
 
 --reload char
 --updateSpeed()
-moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://12120052426"
+moves["TigerDrop"].Anim.AnimationId = "rbxassetid://12120052426"
 respawn()
-moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://11464955887"
+moves["TigerDrop"].Anim.AnimationId = "rbxassetid://11464955887"
 
 local alrRun = Instance.new("Folder", rep)
 alrRun.Name = "Dragon"
