@@ -75,6 +75,11 @@ if rep:FindFirstChild("Dragon") then
 	return
 end
 
+if not _G.dodconfig.rushMoveset then
+	_G.dodconfig.rushMoveset = "Y0"
+	sendNotification("_G.dodconfig.rushMoveset not found,\nset to Y0 as default.", Color3.new(1, 0, 0), Color3.new(0, 0, 0))	
+end
+
 --replace move
 local function addMove(name, style, value)
 	if game.ReplicatedStorage.Styles[style]:FindFirstChild(name) then
@@ -278,6 +283,39 @@ local function playAnim(anim, pri, spd, dur)
 	end)
 end
 
+local function enemyAnim(sub, anim, pri, spd, dur)
+	local animation = Instance.new("Animation", char)
+	animation.AnimationId = anim
+	local track = sub.Humanoid:LoadAnimation(animation)
+	track.Priority = Enum.AnimationPriority[pri]
+	track:Play()
+	
+	if spd then
+		track:AdjustSpeed(spd)
+	end
+	
+	if dur then
+		task.delay(dur, function()
+			track:Stop()
+			animation:Destroy()
+			track:Destroy()
+		end)
+	end
+	
+	track.Ended:Connect(function()
+		track:Destroy()
+		animation:Destroy()
+	end)
+	
+	char.ChildRemoved:Connect(function(c)
+		if c.Name == "Heated" then
+			track:Stop()
+			track:Destroy()
+			animation:Destroy()
+		end
+	end)
+end
+
 local function PlaySoundId(sound, part)
 	local soundclone = Instance.new("Sound")
 	if part then
@@ -371,6 +409,10 @@ for _, style in ipairs(styles:GetChildren()) do
 	run.AnimationId = brawler.Run.AnimationId
 end
 
+if _G.dodconfig.rushMoveset == "7G" then
+	rush.Run.AnimationId = "http://www.roblox.com/asset/?id=10921320299"
+end
+
 beast.Run.AnimationId = "http://www.roblox.com/asset/?id=10921240218"
 
 brawler.WalkL:Clone().Parent = rush
@@ -402,8 +444,16 @@ replaceStyle("Brawler", "堂島の龍")
 
 --style names
 rush.VisualName.Value = "Rush"
+if _G.dodconfig.rushMoveset == "7G" then
+	rush.VisualName.Value = "Agent"
+end
 beast.VisualName.Value = "Beast"
 brawler.VisualName.Value = bName
+
+--style colors
+if _G.dodconfig.rushMoveset == "7G" then
+	rush.Color.Value = Color3.new(0,1,1)
+end
 
 -- rush combos
 -- brawler.StanceStrike.Value = "龍GTigerDrop"
@@ -415,23 +465,52 @@ else
 		brawler["Rush" .. i].Value = "BAttack" .. i
 	end
 end
-	
 
 rush.Rush6.Value = "龍Attack4"
 rush.Rush7.Value = "BAttack4"
 
+if _G.dodconfig.rushMoveset == "7G" then
+	local combos = {
+		[1] = "龍Attack1",
+		[2] = "BAttack1",
+		[3] = "龍Attack1",
+		[4] = "龍Attack2",
+		[5] = "BAttack2",
+		[6] = "RPunch1",
+		[7] = "龍Attack3",
+		[8] = "RPunch",
+		[9] = "FStrike4"
+	}
+	
+	for i = 1, 9 do
+		addMove("Rush" .. i, "Rush", combos[i])
+	end
+end
+
 --finishing blows
 brawler.EvadeStrikeB.Value = "RDashAttack"
 
-rush.Strike1.Value = "BStrike5"
-rush.Strike2.Value = "FStrike4"
-rush.Strike3.Value = "FStrike4"
-rush.Strike4.Value = "FStrike4"
-rush.Strike5.Value = "FStrike4"
-rush.Strike6.Value = "FStrike4"
-rush.Strike7.Value = "BTStrike2"
-rush.Strike8.Value = "BTStrike2"
-rush.Strike9.Value = "BTStrike2"
+if _G.dodconfig.rushMoveset == "7G" then
+	rush.Strike1.Value = "FPunch1"
+	rush.Strike2.Value = "龍Strike5"
+	rush.Strike3.Value = "BStrike3"
+	rush.Strike4.Value = "龍Strike5"
+	rush.Strike5.Value = "MStrike1"
+	rush.Strike6.Value = "B2Strike2"
+	rush.Strike7.Value = "龍2Strike3"
+	rush.Strike8.Value = "RStrike9"
+	rush.Strike9.Value = "BTStrike2"
+else
+	rush.Strike1.Value = "BStrike5"
+	rush.Strike2.Value = "FStrike4"
+	rush.Strike3.Value = "FStrike4"
+	rush.Strike4.Value = "FStrike4"
+	rush.Strike5.Value = "FStrike4"
+	rush.Strike6.Value = "FStrike4"
+	rush.Strike7.Value = "BTStrike2"
+	rush.Strike8.Value = "BTStrike2"
+	rush.Strike9.Value = "BTStrike2"
+end
 
 rush.EvadeStrikeL.Value = "BEvadeStrikeLeft"
 rush.EvadeStrikeB.Value = "ParkerDrop"
@@ -508,7 +587,7 @@ if not IsInPvp() then
 end
 
 addMove("H_GrabStanding", "Brawler", "H_HeadPress")
-addMove("H_EvadedF", "Rush", "H_TSpinCounterFront")
+addMove("H_EvadedF", "Rush", "H_TSpinCounterRight")
 addMove("H_EvadedR", "Rush", "H_FrenzySpinCounter")
 addMove("H_Standing", "Shotgun", styles.SMG.H_Standing.Value)
 addMove("H_Standing", "SMG", styles.Pistol.H_Standing.Value)
@@ -733,6 +812,7 @@ local hactNames = {
 -- custom heat actions
 heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 	function()
+	local heatthing = char.Heated
 	local currentText = Main.HeatMove.TextLabel.Text
 	local newText = hactNames[currentText]
 	if newText then
@@ -742,6 +822,7 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 	if Main.HeatMove.TextLabel.Text == "Essence of Frenzy" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Extreme Rush"
 		playAnim(moves["H_Tonfa"].Anim.AnimationId, "Action4", 1)
+		enemyAnim(heatthing.Heating.Value, moves["H_Tonfa"].Victim1.AnimationId, "Action4", 1)
 		PlaySound("Slap")
 		task.wait(0.7)
 		for i = 1, 4 do
@@ -754,6 +835,7 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 			Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
 			yinglong.Transparency = .5
 			playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
+			enemyAnim(heatthing.Heating.Value, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", 1)
 		elseif char:FindFirstChild("BeingHeated") then
 			Main.HeatMove.TextLabel.Text = "Essence of Desperation"
 			playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", .7, .9)
@@ -772,7 +854,7 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
 		task.wait(0.5)
 		playAnim(moves.H_FallenProne.Anim.AnimationId, "Action4", 1)
-	elseif Main.HeatMove.TextLabel.Text == "Komaki Fist Reversal [Right]" and not char:FindFirstChild("BeingHeated") then
+	elseif status.Style.Value == "Rush" and Main.HeatMove.TextLabel.Text == "Komaki Fist Reversal [Right]" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
 	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Head Press: Prone" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Might"
@@ -811,11 +893,17 @@ local function styleswitch()
 			guyImage.Image = "rbxassetid://108063383518240"
 		end
 	elseif status.Style.Value == "Rush" then
-		guyImage.Image = "rbxassetid://104601719368210"
+		if _G.dodconfig.rushMoveset == "7G" then
+			guyImage.Image = "rbxassetid://108301240160748"
+		else
+			guyImage.Image = "rbxassetid://104601719368210"
+		end
 	elseif status.Style.Value == "Beast" then
 		guyImage.Image = "rbxassetid://117731163415083"
 	end
 end
+
+-- 108301240160748
 
 status.Style:GetPropertyChangedSignal("Value"):Connect(
 	function()
@@ -1118,7 +1206,6 @@ end)
 --reload char
 --updateSpeed()
 moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://12120052426"
-moves["龍GTigerDrop"].Anim.AnimationId = moves.BAttack3.Anim.AnimationId
 respawn()
 moves["龍TigerDrop"].Anim.AnimationId = "rbxassetid://11464955887"
 
