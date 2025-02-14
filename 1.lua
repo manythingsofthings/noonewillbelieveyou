@@ -1231,7 +1231,7 @@ local characterToChange = "Your Avatar"
 local characterToChangeTo = "Kiryu Morph"
 
 if _G.dodconfig.morph then
-	_G.Morph = _g.dodconfig.useMorph
+	_G.Morph = _G.dodconfig.useMorph
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
 end
 
