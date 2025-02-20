@@ -360,7 +360,7 @@ end
 
 local function IsInPvp()
 	if plr:FindFirstChild("PvPed") then
-		return true
+		plr:Kick("ough... yagami...")
 	else
 		return false
 	end
@@ -458,11 +458,11 @@ end
 
 -- rush combos
 -- brawler.StanceStrike.Value = "龍GTigerDrop"
-if bName == "Ouryu" then
+if _G.dodconfig.moveset == "DE" then
 	brawler.Rush3.Value = "BAttack2"
 	brawler.Rush4.Value = "FPunch1"
 else
-	for i = 1, 3 do
+	for i = 1, 4 do
 		brawler["Rush" .. i].Value = "BAttack" .. i
 	end
 end
@@ -522,7 +522,7 @@ beast.Strike2.Value = "DashAttack"
 beast.Strike3.Value = "BStrike3"
 beast.Strike4.Value = "DerekCharge"
 
-if bName == "Ouryu" then
+if _G.dodconfig.moveset == "DE" then
 	brawler.Strike2.Value = "BStrike3"
 	brawler.Strike3.Value = "B2Strike2"
 	brawler.Strike4.Value = "BStrike5"
@@ -539,7 +539,7 @@ else
 end
 
 -- misc. moves
-addMove("GrabStrike", "Brawler", "T_龍GParry")
+addMove("GrabStrike", "Brawler", "T_GuruParry")
 addMove("DashAttack", "Brawler", "龍2Strike4")
 rush.Grab.Value = "BStomp"
 rush.DashAttack.Value = "龍2Strike1"
@@ -583,12 +583,8 @@ char.ChildAdded:Connect(
 end)
 
 -- hacts
-if not IsInPvp() then
-	addMove("H_Stunned", "Brawler", "H_GUltimateEssence")
-end
-
 addMove("H_GrabStanding", "Brawler", "H_HeadPress")
-addMove("StanceStrike", "Brawler", "TigerDrop")
+addMove("StanceStrike", "Brawler", "CounterHook")
 addMove("H_EvadedF", "Rush", "H_TSpinCounterRight")
 addMove("H_EvadedR", "Rush", "H_FrenzySpinCounter")
 addMove("H_Standing", "Shotgun", styles.SMG.H_Standing.Value)
@@ -601,9 +597,35 @@ addMove("H_Fallen", "Holding", styles.OneHandedHolding.H_Fallen.Value)
 brawler.H_Distanced:Destroy()
 brawler.H_Running4:Destroy()
 
-addMove("H_EvadedF", "Brawler", "H_Escape")
-
 styles.BatHolding.H_Standing.Value = "H_SluggerBat"
+
+local ouryu = brawler:Clone()
+ouryu.Parent = styles
+ouryu.Name = "Ouryu"
+
+local dragon = brawler:Clone()
+dragon.Parent = styles
+dragon.Name = "Dragon"
+
+for i = 1, 4 do
+	addMove("Rush" .. i, "Dragon", "龍Attack" .. i)
+	addMove("2Strike" .. i + 1, "Dragon", "龍2Strike" .. i)
+end
+
+local dragonF = {
+	[1] = "龍Strike1",
+	[2] = "BStrike2",
+	[3] = "BStrike3",
+	[4] = "BStrike5",
+	[5] = "龍Strike5"
+}
+
+for i = 1, 5 do
+	addMove("Strike" .. i, "Dragon", dragonF[i])
+end
+
+addMove("StanceStrike", "Dragon", "TigerDrop")
+addMove("GrabStrike", "Dragon", "T_FinishingHold1")
 
 --move anims i'm not fucking organizing these
 local rushAnims = {
@@ -643,7 +665,7 @@ moves.BTStrike2.AniSpeed.Value = 1.15
 moves.BTStrike2.HitDur.Value = moves["BStrike4"].HitDur.Value
 moves.BTStrike2.HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
 
-if bName == "Ouryu" then
+if _G.dodconfig.moveset == "DE" then
 	moves["BStrike4"].Anim.AnimationId = moves["BStrike4"].TurnAnim.AnimationId
 	moves["BStrike4"].HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
 	moves.BStrike4.AniSpeed.Value = 1.15
@@ -665,6 +687,7 @@ moves["B2Strike3"].Anim.AnimationId = moves["BAttack4"].TurnAnim.AnimationId
 moves["BEvadeStrikeLeft"].Anim.AnimationId = "rbxassetid://10848059240"
 moves["BEvadeStrikeRight"].Anim.AnimationId = "rbxassetid://10848057381"
 moves["BAttack4"].Anim.AnimationId = "rbxassetid://11593137190"
+moves["TigerDrop"].Anim.AnimationId = moves["BAttack2"].TurnAnim.AnimationId
 moves["BGetup"].Anim.AnimationId = moves.RSweep.Anim.AnimationId
 
 --misc. move shit
@@ -677,6 +700,7 @@ moves["龍2Strike4"].AniSpeed.Value = .4
 moves["B2Strike3"].AniSpeed.Value = .8
 moves["龍2Strike2"].MoveDuration.Value = .35
 moves["TigerDrop"].MoveDuration.Value = 0
+moves["TigerDrop"].HitboxLocations.Value = moves["BAttack2"].THitboxLocations.Value
 moves.BStrike2.ComboAt.Value = moves.BStrike2.ComboAt.Value - 0.15
 moves.BStrike2.MoveForward.Value = moves.BStrike2.MoveForward.Value - 3
 moves["BStrike3"].AniSpeed.Value = moves.BStrike2.AniSpeed.Value + 0.05
@@ -696,7 +720,7 @@ moves["BStrike1"].THitboxLocations:Clone().Parent = moves["龍Strike1"]
 
 moves.BStrike4.ComboAt:Clone().Parent = moves.DashAttack
 
-moves.B2Strike3.Trail.Value = "LeftFoot"
+moves.B2Strike3.Trail.Value = "RightFoot"
 moves.BTStrike4.Trail.Value = "RightFoot"
 
 moves.GAttack3.SF:Clone().Parent = moves["龍2Strike2"]
@@ -852,9 +876,14 @@ heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
 		task.wait(0.5)
 		playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", 1)
 	elseif Main.HeatMove.TextLabel.Text == "Essence of Crushing" and not char:FindFirstChild("BeingHeated") then
-		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
-		task.wait(0.5)
-		playAnim(moves.H_FallenProne.Anim.AnimationId, "Action4", 1)
+		if status.Style.Value == "Brawler" then
+			Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
+			task.wait(0.5)
+			playAnim(moves.H_FallenProne.Anim.AnimationId, "Action4", 1)
+		else
+			Main.HeatMove.TextLabel.Text = "Essence of Crushing "
+			playAnim(moves.H_TSpinCounterBack.Anim.AnimationId, "Action4", 1)
+		end
 	elseif status.Style.Value == "Rush" and Main.HeatMove.TextLabel.Text == "Komaki Fist Reversal [Right]" and not char:FindFirstChild("BeingHeated") then
 		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
 	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Head Press: Prone" and not char:FindFirstChild("BeingHeated") then
@@ -948,9 +977,9 @@ rds:GetPropertyChangedSignal("Value"):Connect(function()
 		task.wait(.75)
 		rep.IsELO.Value = false
 		char.HumanoidRootPart.Anchored = false
-		addMove("GrabStrike", "Brawler", "T_FinishingHold1")
+		replaceStyle("Brawler", "Dragon")
 	else
-		addMove("GrabStrike", "Brawler", "T_龍GParry")
+		replaceStyle("Brawler", "Ouryu")
 	end
 end)
 
@@ -962,7 +991,7 @@ status.AttackBegan.Changed:Connect(function()
 			task.delay(.8, function()
 				brawler.Strike1.Value = "龍Strike1"
 			end)
-		elseif (status.CurrentMove.Value.Name == "BStrike4" and bName == "Ouryu") or status.CurrentMove.Value.Name == "龍2Strike4" then
+		elseif (status.CurrentMove.Value.Name == "BStrike4" and _G.dodconfig.moveset == "DE") or status.CurrentMove.Value.Name == "龍2Strike4" then
 			brawler.Strike1.Value = "龍Strike5"
 			task.delay(.8, function()
 				brawler.Strike1.Value = "龍Strike1"
@@ -1205,10 +1234,7 @@ status.Health.Changed:Connect(
 end)
 
 --reload char
---updateSpeed()
-moves["TigerDrop"].Anim.AnimationId = "rbxassetid://12120052426"
 respawn()
-moves["TigerDrop"].Anim.AnimationId = "rbxassetid://11464955887"
 
 local alrRun = Instance.new("Folder", rep)
 alrRun.Name = "Dragon"
@@ -1231,7 +1257,12 @@ local characterToChange = "Your Avatar"
 local characterToChangeTo = "Kiryu Morph"
 
 if _G.dodconfig.morph then
-	_G.Morph = _G.dodconfig.useMorph
+	if not _G.dodconfig.custommorph then
+		_G.Morph = _G.dodconfig.useMorph
+	else
+		_G.Morph = "Legendary Dragon"
+	end
+	
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
 end
 
