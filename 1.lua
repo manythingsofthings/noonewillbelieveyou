@@ -599,13 +599,9 @@ brawler.H_Running4:Destroy()
 
 styles.BatHolding.H_Standing.Value = "H_SluggerBat"
 
-local ouryu = brawler:Clone()
-ouryu.Parent = styles
-ouryu.Name = "Ouryu"
+brawler.H_FullHeat.Value = "H_GUltimateEssence"
+brawler.H_FullHeat.Name = "H_FullStunned"
 
-local dragon = brawler:Clone()
-dragon.Parent = styles
-dragon.Name = "Dragon"
 
 for i = 1, 4 do
 	addMove("Rush" .. i, "Dragon", "龍Attack" .. i)
@@ -1242,8 +1238,6 @@ alrRun.Name = "Dragon"
 if brawler:FindFirstChild("H_FullHeat") then
 	brawler.H_FullHeat:Destroy()
 end
-
-addMove("H_Stunned", "Brawler", "H_GUltimateEssence")
 
 game:GetService("RunService").RenderStepped:Connect(
 	function()
