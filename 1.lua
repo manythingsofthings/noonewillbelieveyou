@@ -1260,75 +1260,79 @@ if _G.dodconfig.morph then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
 end
 
-if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and _G.dodconfig.custommorph == "Y5" and char:FindFirstChild("Ignore") then
-	local kiryuHairMesh = char.Ignore.FakeHead.Kiryu_Hair.Mesh
-	kiryuHairMesh.MeshId = "rbxassetid://14720023616"
-	kiryuHairMesh.TextureId = "rbxassetid://14719999915"
-	kiryuHairMesh.Offset = Vector3.new(0, - 0.25, 0.15)
+if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and char:FindFirstChild("Ignore") then
+	if _G.dodconfig.custommorph == "Y5" or _G.dodconfig.custommorph == "Y1" then
+		local kiryuHairMesh = char.Ignore.FakeHead.Kiryu_Hair.Mesh
+		kiryuHairMesh.MeshId = "rbxassetid://14720023616"
+		kiryuHairMesh.TextureId = "rbxassetid://14719999915"
+		kiryuHairMesh.Offset = Vector3.new(0, - 0.25, 0.15)
+	end
 	
-	local darkGrey = BrickColor.new("Dark grey")
-	local black = BrickColor.new("Black")
-	local white = BrickColor.new("White")
-
-	for _, part in ipairs(char:GetChildren()) do
-		if part:IsA("MeshPart") then
-			if string.match(part.Name, "Arm") or part.Name == "UpperTorso" then
-				part.BrickColor = darkGrey
-			elseif not string.match(part.Name, "Hand") and part.Name ~= "Head" then
-				part.BrickColor = black
+	if _G.dodconfig.custommorph == "Y5" then
+		local darkGrey = BrickColor.new("Dark grey")
+		local black = BrickColor.new("Black")
+		local white = BrickColor.new("White")
+	
+		for _, part in ipairs(char:GetChildren()) do
+			if part:IsA("MeshPart") then
+				if string.match(part.Name, "Arm") or part.Name == "UpperTorso" then
+					part.BrickColor = darkGrey
+				elseif not string.match(part.Name, "Hand") and part.Name ~= "Head" then
+					part.BrickColor = black
+				end
 			end
 		end
-	end
-
-	local colorUpdates = {
-		{
-			char.Ignore.FakeUpperTorso.Kiryu_Skin,
-			white
-		},
-		{
-			char.Ignore.FakeUpperTorso.Kiryu_Suit,
-			darkGrey
-		},
-		{
-			char.Ignore.FakeLowerTorso.Kiryu_Tail,
-			darkGrey
-		},
-		{
-			char.Ignore.FakeLeftLowerArm.Suit_CuffL,
-			darkGrey
-		},
-		{
-			char.Ignore.FakeRightLowerArm.Suit_CuffR,
-			darkGrey
-		},
-		{
-			char.Ignore.FakeLeftLowerArm.Suit_CuffSL,
-			darkGrey
-		},
-		{
-			char.Ignore.FakeRightLowerArm.Suit_CuffSR,
-			darkGrey
-		},
-		{
-			char.Ignore.FakeUpperTorso.Kiryu_Shirt,
-			black
-		},
-		{
-			char.Ignore.FakeLowerTorso.Kiryu_BeltLoop,
-			black
-		},
-		{
-			char.Ignore.FakeLeftLowerLeg.Suit_PantL,
-			black
-		},
-		{
-			char.Ignore.FakeRightLowerLeg.Suit_PantR,
-			black
-		},
-	}
-
-	for _, update in ipairs(colorUpdates) do
-		update[1].BrickColor = update[2]
+	
+		local colorUpdates = {
+			{
+				char.Ignore.FakeUpperTorso.Kiryu_Skin,
+				white
+			},
+			{
+				char.Ignore.FakeUpperTorso.Kiryu_Suit,
+				darkGrey
+			},
+			{
+				char.Ignore.FakeLowerTorso.Kiryu_Tail,
+				darkGrey
+			},
+			{
+				char.Ignore.FakeLeftLowerArm.Suit_CuffL,
+				darkGrey
+			},
+			{
+				char.Ignore.FakeRightLowerArm.Suit_CuffR,
+				darkGrey
+			},
+			{
+				char.Ignore.FakeLeftLowerArm.Suit_CuffSL,
+				darkGrey
+			},
+			{
+				char.Ignore.FakeRightLowerArm.Suit_CuffSR,
+				darkGrey
+			},
+			{
+				char.Ignore.FakeUpperTorso.Kiryu_Shirt,
+				black
+			},
+			{
+				char.Ignore.FakeLowerTorso.Kiryu_BeltLoop,
+				black
+			},
+			{
+				char.Ignore.FakeLeftLowerLeg.Suit_PantL,
+				black
+			},
+			{
+				char.Ignore.FakeRightLowerLeg.Suit_PantR,
+				black
+			},
+		}
+	
+		for _, update in ipairs(colorUpdates) do
+			update[1].BrickColor = update[2]
+		end
 	end
 end
 
