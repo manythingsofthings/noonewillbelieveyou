@@ -602,6 +602,13 @@ styles.BatHolding.H_Standing.Value = "H_SluggerBat"
 brawler.H_FullHeat.Value = "H_GUltimateEssence"
 brawler.H_FullHeat.Name = "H_FullStunned"
 
+local ouryu = brawler:Clone()
+ouryu.Parent = styles
+ouryu.Name = "Ouryu"
+
+local dragon = ouryu:Clone()
+dragon.Parent = styles
+dragon.Name = "Dragon"
 
 for i = 1, 4 do
 	addMove("Rush" .. i, "Dragon", "龍Attack" .. i)
@@ -1315,6 +1322,64 @@ if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and char:FindFirstChild
 			{
 				char.Ignore.FakeUpperTorso.Kiryu_Shirt,
 				black
+			},
+			{
+				char.Ignore.FakeLowerTorso.Kiryu_BeltLoop,
+				black
+			},
+			{
+				char.Ignore.FakeLeftLowerLeg.Suit_PantL,
+				black
+			},
+			{
+				char.Ignore.FakeRightLowerLeg.Suit_PantR,
+				black
+			},
+		}
+	
+		for _, update in ipairs(colorUpdates) do
+			update[1].BrickColor = update[2]
+		end
+	elseif _G.dodconfig.custommorph == "Y0" then
+		local black = BrickColor.new("Black")
+		local white = BrickColor.new("White")
+	
+		for _, part in ipairs(char:GetChildren()) do
+			if part:IsA("MeshPart") then
+				if not string.match(part.Name, "Hand") and part.Name ~= "Head" then
+					part.BrickColor = black
+				end
+			end
+		end
+	
+		local colorUpdates = {
+			{
+				char.Ignore.FakeUpperTorso.Kiryu_Suit,
+				black
+			},
+			{
+				char.Ignore.FakeLowerTorso.Kiryu_Tail,
+				black
+			},
+			{
+				char.Ignore.FakeLeftLowerArm.Suit_CuffL,
+				black
+			},
+			{
+				char.Ignore.FakeRightLowerArm.Suit_CuffR,
+				black
+			},
+			{
+				char.Ignore.FakeLeftLowerArm.Suit_CuffSL,
+				white
+			},
+			{
+				char.Ignore.FakeRightLowerArm.Suit_CuffSR,
+				white
+			},
+			{
+				char.Ignore.FakeUpperTorso.Kiryu_Shirt,
+				white
 			},
 			{
 				char.Ignore.FakeLowerTorso.Kiryu_BeltLoop,
