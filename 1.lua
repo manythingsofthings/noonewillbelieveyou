@@ -528,7 +528,7 @@ if _G.dodconfig.moveset == "DE" then
 	brawler.Strike4.Value = "BStrike5"
 	brawler.Strike5.Value = "BStrike4"
 	brawler["2Strike2"].Value = "B2Strike1"
-	brawler["2Strike3"].Value = "BTCounter"
+	brawler["2Strike3"].Value = "MStrike2"
 	brawler["2Strike4"].Value = "BStrike4"
 	brawler["2Strike5"].Value = "FStrike2"
 else
@@ -690,15 +690,17 @@ moves["B2Strike3"].Anim.AnimationId = moves["BAttack4"].TurnAnim.AnimationId
 moves["BEvadeStrikeLeft"].Anim.AnimationId = "rbxassetid://10848059240"
 moves["BEvadeStrikeRight"].Anim.AnimationId = "rbxassetid://10848057381"
 moves["BAttack4"].Anim.AnimationId = "rbxassetid://11593137190"
+moves["MStrike2"].Anim.AnimationId = moves["H_FallenKick"].Anim.AnimationId
 moves["TigerDrop"].Anim.AnimationId = moves["BAttack2"].TurnAnim.AnimationId
 moves["BGetup"].Anim.AnimationId = moves.RSweep.Anim.AnimationId
 
 --misc. move shit
 Instance.new("StringValue", moves["B2Strike1"]).Name = "AniSpeed"
 moves["B2Strike1"].AniSpeed.Value = 1.5
-moves["BAttack4"].AniSpeed.Value = 1.15
 moves["FStrike4"].AniSpeed.Value = .5
 moves["龍2Strike2"].AniSpeed.Value = 1.45
+moves["MStrike2"].AniSpeed.Value = 1.25
+moves["MStrike2"].HitboxLocations.Value = moves["BTCounter"].HitboxLocations.Value
 moves["龍2Strike4"].AniSpeed.Value = .4
 moves["B2Strike3"].AniSpeed.Value = .8
 moves["龍2Strike2"].MoveDuration.Value = .35
@@ -1014,7 +1016,7 @@ status.AttackBegan.Changed:Connect(function()
 			task.delay(3, function()
 				brawler.Strike1.Value = "龍Strike1"
 			end)
-		elseif status.CurrentMove.Value.Name == "BTCounter" then
+		elseif status.CurrentMove.Value.Name == "MStrike2" then
 			brawler.Strike1.Value = "B2Strike2"
 			task.delay(.5, function()
 				brawler.Strike1.Value = "龍Strike1"
@@ -1273,6 +1275,25 @@ if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and char:FindFirstChild
 		kiryuHairMesh.MeshId = "rbxassetid://14720023616"
 		kiryuHairMesh.TextureId = "rbxassetid://14719999915"
 		kiryuHairMesh.Offset = Vector3.new(0, - 0.25, 0.15)
+	elseif _G.dodconfig.custommorph == "2hu" then
+		local beret = char.Ignore.FakeHead.Kiryu_Hair
+		beret.Mesh.MeshId = "rbxassetid://15612556635"
+		beret.Mesh.TextureId = "rbxassetid://15612558735"
+		beret.Mesh.Offset = Vector3.new(0, .5, 0)
+		local hair1 = beret:Clone()
+		hair1.Mesh.MeshId = "rbxassetid://13556307008"
+		hair1.Mesh.TextureId = "http://www.roblox.com/asset/?id=13335165334"
+		hair1.Parent = beret.Parent
+		hair1.Mesh.Offset = Vector3.new(.05, -1, 0)
+		local hair2 = beret:Clone()
+		hair2.Mesh.MeshId = "rbxassetid://13813808731"
+		hair2.Mesh.TextureId = "http://www.roblox.com/asset/?id=13335165334"
+		hair2.Parent = beret.Parent
+		hair2.Mesh.Offset = Vector3.new(.05, -1, 0)
+		
+		char.Ignore.FakeHead.face.Texture = "rbxassetid://108833103440334"
+		
+		hair2:FindFirstChildOfClass("Weld").C1 = hair2:FindFirstChildOfClass("Weld").C1 * CFrame.Angles(0, math.rad(180), 0)
 	end
 	
 	if _G.dodconfig.custommorph == "Y5" then
@@ -1398,6 +1419,36 @@ if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and char:FindFirstChild
 		for _, update in ipairs(colorUpdates) do
 			update[1].BrickColor = update[2]
 		end
+	elseif _G.dodconfig.custommorph == "2hu" then
+		Instance.new("Pants", char).PantsTemplate = "http://www.roblox.com/asset/?id=9651684388"
+		
+		local remove = {
+			char.Ignore.FakeUpperTorso.Kiryu_Suit,
+			char.Ignore.FakeLowerTorso.Kiryu_Tail,
+			char.Ignore.FakeLowerTorso.Kiryu_Belt,
+			char.Ignore.FakeUpperTorso.Kiryu_Shirt,
+			char.Ignore.FakeUpperTorso.Kiryu_Skin,
+			char.Ignore.FakeUpperTorso.Kiryu_Buttons,
+			char.Ignore.FakeLowerTorso.Kiryu_BeltLoop,
+			char.Ignore.FakeRightLowerArm.Suit_CuffSR,
+			char.Ignore.FakeLeftLowerArm.Suit_CuffSL,
+		}
+		
+		for _, v in ipairs(remove) do
+			v:Destroy()
+		end
+		
+		char.Ignore.FakeRightLowerArm.Suit_CuffR:FindFirstChildOfClass("Weld").Part0 = char.Ignore.FakeRightUpperArm
+		char.Ignore.FakeLeftLowerArm.Suit_CuffL:FindFirstChildOfClass("Weld").Part0 = char.Ignore.FakeLeftUpperArm
+		char.Ignore.FakeRightLowerArm.Suit_CuffR:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.012, -.511, -.002)
+		char.Ignore.FakeLeftLowerArm.Suit_CuffL:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.001, -.511, -.002)
+		char.Ignore.FakeLeftLowerLeg.Suit_PantL:FindFirstChildOfClass("Weld").C1 = CFrame.new(0, -.25, 0)
+		char.Ignore.FakeRightLowerLeg.Suit_PantR:FindFirstChildOfClass("Weld").C1 = CFrame.new(0, -.25, 0)
+		
+		char.LeftLowerArm.Material = Enum.Material.Air
+		char.RightLowerArm.Material = Enum.Material.Air
+		char.LeftLowerArm.Color = char.LeftHand.Color
+		char.RightLowerArm.Color = char.LeftHand.Color
 	end
 end
 
