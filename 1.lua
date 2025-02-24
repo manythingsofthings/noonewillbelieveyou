@@ -361,6 +361,8 @@ end
 local function IsInPvp()
 	if plr:FindFirstChild("PvPed") then
 		plr:Kick("ough... yagami...")
+		task.wait(1)
+		while true do end
 	else
 		return false
 	end
