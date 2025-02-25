@@ -19,7 +19,6 @@ local pgui = plr.PlayerGui
 local status = plr.Status
 local interf = pgui.Interface
 local Main = interf.Battle.Main
-local rStrike9 = 0
 local cas = game:GetService("ContextActionService")
 local uis = game:GetService("UserInputService")
 local rHact = Instance.new("BoolValue", status)
@@ -250,43 +249,10 @@ end
 
 local ts = game:GetService("TweenService")
 
-local function playAnim(anim, pri, spd, dur)
+local function playAnim(sub, anim, pri, spd, dur)
 	local animation = Instance.new("Animation", char)
 	animation.AnimationId = anim
-	local track = humanoid:LoadAnimation(animation)
-	track.Priority = Enum.AnimationPriority[pri]
-	track:Play()
-	
-	if spd then
-		track:AdjustSpeed(spd)
-	end
-	
-	if dur then
-		task.delay(dur, function()
-			track:Stop()
-			animation:Destroy()
-			track:Destroy()
-		end)
-	end
-	
-	track.Ended:Connect(function()
-		track:Destroy()
-		animation:Destroy()
-	end)
-	
-	char.ChildRemoved:Connect(function(c)
-		if c.Name == "Heated" then
-			track:Stop()
-			track:Destroy()
-			animation:Destroy()
-		end
-	end)
-end
-
-local function enemyAnim(sub, anim, pri, spd, dur)
-	local animation = Instance.new("Animation", char)
-	animation.AnimationId = anim
-	local track = sub.Humanoid:LoadAnimation(animation)
+	local track = sub:LoadAnimation(animation)
 	track.Priority = Enum.AnimationPriority[pri]
 	track:Play()
 	
@@ -361,8 +327,6 @@ end
 local function IsInPvp()
 	if plr:FindFirstChild("PvPed") then
 		plr:Kick("ough... yagami...")
-		task.wait(1)
-		while true do end
 	else
 		return false
 	end
@@ -641,6 +605,13 @@ local rushAnims = {
 	["RPunch5"] = "BAttack3"
 }
 
+local strike = {
+	"rbxassetid://7603768348",
+	"rbxassetid://7604164281",
+	"rbxassetid://7546691847",
+	"rbxassetid://7603758004"
+}
+
 for i = 1, 5 do
 	moves["RPunch" .. i].Anim.AnimationId = moves[rushAnims["RPunch" .. i]].Anim.AnimationId
 	moves["RPunch" .. i].HitboxLocations.Value = moves[rushAnims["RPunch" .. i]].HitboxLocations.Value
@@ -838,67 +809,88 @@ local hactNames = {
 	["Guru Firearm Flip"] = "Komaki Shot Stopper",
 	["Essence of Fisticuffs"] = "Essence of Brawling",
 	["Essence of Whirl"] = "Essence of Mad Dog: Aerial Whirl",
+	["Essence of Beatdown"] = "Essence of Weaponry",
 	["Essence of Chokehold"] = "Essence of Mad Dog: Chokehold",
 }
 
 -- custom heat actions
-heatMoveTextLabel:GetPropertyChangedSignal("Text"):Connect(
-	function()
-	local heatthing = char.Heated
-	local currentText = Main.HeatMove.TextLabel.Text
-	local newText = hactNames[currentText]
-	if newText then
-		Main.HeatMove.TextLabel.Text = newText
-	end
-	
-	if Main.HeatMove.TextLabel.Text == "Essence of Frenzy" and not char:FindFirstChild("BeingHeated") then
-		Main.HeatMove.TextLabel.Text = "Essence of Extreme Rush"
-		playAnim(moves["H_Tonfa"].Anim.AnimationId, "Action4", 1)
-		enemyAnim(heatthing.Heating.Value, moves["H_Tonfa"].Victim1.AnimationId, "Action4", 1)
-		PlaySound("Slap")
-		task.wait(0.7)
-		for i = 1, 4 do
-			PlaySound("Slap")
-			task.wait(0.3)
-		end
-		PlaySound("MassiveSlap")
-	elseif Main.HeatMove.TextLabel.Text == "Ultimate Essence" then
-		if _G.dodconfig.moveset == "DE" and not char:FindFirstChild("BeingHeated") then
-			Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
-			yinglong.Transparency = .5
-			playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
-			enemyAnim(heatthing.Heating.Value, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", 1)
-		elseif char:FindFirstChild("BeingHeated") then
-			Main.HeatMove.TextLabel.Text = "Essence of Desperation"
-			playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", .7, .9)
-			task.wait(.9)
-			Main.HeatMove.TextLabel.Text = "it failed :["
-		end
-	elseif Main.HeatMove.TextLabel.Text == "Essence of Fast Footwork [Left]" and not char:FindFirstChild("BeingHeated") then
-		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Left] "
-		task.wait(0.5)
-		playAnim(moves["H_TSpinCounterRight"].Anim.AnimationId, "Action4", 1)
-	elseif Main.HeatMove.TextLabel.Text == "Essence of Rolling" and not char:FindFirstChild("BeingHeated") then
-		Main.HeatMove.TextLabel.Text = "Essence of Rolling "
-		task.wait(0.5)
-		playAnim(moves["H_Whirl"].Anim.AnimationId, "Action4", 1)
-	elseif Main.HeatMove.TextLabel.Text == "Essence of Crushing" and not char:FindFirstChild("BeingHeated") then
-		if status.Style.Value == "Brawler" then
-			Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
-			task.wait(0.5)
-			playAnim(moves.H_FallenProne.Anim.AnimationId, "Action4", 1)
-		else
-			Main.HeatMove.TextLabel.Text = "Essence of Crushing "
-			playAnim(moves.H_TSpinCounterBack.Anim.AnimationId, "Action4", 1)
-		end
-	elseif status.Style.Value == "Rush" and Main.HeatMove.TextLabel.Text == "Komaki Fist Reversal [Right]" and not char:FindFirstChild("BeingHeated") then
-		Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
-	elseif status.Style.Value == "Brawler" and Main.HeatMove.TextLabel.Text == "Essence of Head Press: Prone" and not char:FindFirstChild("BeingHeated") then
-		Main.HeatMove.TextLabel.Text = "Essence of Might"
-	elseif Main.HeatMove.TextLabel.Text == "Essence of Beatdown" and not char:FindFirstChild("BeingHeated") then
-		for _, p in ipairs(char:GetChildren()) do
-			if string.find(p.Name, "wep_") or string.find(p.Name, "prop_") then
-				Main.HeatMove.TextLabel.Text = "Essence of Weaponry"
+char.ChildAdded:Connect(function(c)
+	if c.Name == "Heated" then
+		local movename = c:WaitForChild("MoveName", 1/60)
+		local heating = c:WaitForChild("Heating", 1/60)
+		
+		if movename then
+			if heating then
+				if hactNames[movename.Value] then
+					task.delay(1/60, function()
+						Main.HeatMove.TextLabel.Text = hactNames[movename.Value]
+					end)
+				elseif movename.Value == "Essence of Frenzy" then
+					Main.HeatMove.TextLabel.Text = "Essence of Extreme Rush"
+					playAnim(humanoid, moves["H_Tonfa"].Anim.AnimationId, "Action4", 1)
+					playAnim(heating.Value.Humanoid, moves["H_Tonfa"].Victim1.AnimationId, "Action4", 1)
+					local slapTimes = {
+						0,
+						.7,
+						1,
+						1.3,
+						1.6,
+						1.9
+					}
+					for _, t in ipairs(slapTimes) do
+						task.delay(t, function()
+							PlaySound("Slap")
+						end)
+					end
+			
+					task.delay(1.9, function()
+						PlaySound("MassiveSlap")
+					end)
+				elseif movename.Value == "Ultimate Essence" then
+					if _G.dodconfig.moveset == "DE" then
+						playAnim(humanoid, moves["H_UltimateEssence"].Anim.AnimationId, "Action4", 1)
+						playAnim(heating.Value.Humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", 1)
+						task.delay(1, function()
+							PlaySound("MassiveSlap")
+						end)
+					else
+						Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
+						yinglong.Transparency = .5
+						playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
+					end
+				elseif movename.Value == "Essence of Fast Footwork [Left]" then
+					task.delay(.5, function()
+						playAnim(humanoid, moves["H_TSpinCounterRight"].Anim.AnimationId, "Action4", 1)
+					end)
+				elseif movename.Value == "Essence of Rolling" then
+					task.delay(.5, function()
+						playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", 1)
+					end)
+				elseif movename.Value == "Essence of Crushing" then
+					task.delay(1/60, function()
+						Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
+					end)
+					task.delay(.5, function()
+						playAnim(humanoid, moves["H_FallenProne"].Anim.AnimationId, "Action4", 1)
+					end)
+				elseif status.Style.Value == "Rush" and movename.Value == "Komaki Fist Reversal [Right]" then
+					task.delay(1/60, function()
+						Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
+					end)
+				elseif status.Style.Value == "Brawler" and movename.Value == "Essence of Head Press: Prone" then
+					task.delay(1/60, function()
+						Main.HeatMove.TextLabel.Text = "Essence of Might"
+					end)
+				elseif movename.Value == "Essence of Whirl" then
+					task.delay(1/60, function()
+						Main.HeatMove.TextLabel.Text = "Essence of Mad Dog: Whirl"
+					end)
+					playAnim(humanoid, "rbxassetid://11409668605", "Action4", 1)
+					playAnim(heating.Value.Humanoid, "rbxassetid://11409670145", "Action4", 1)
+				end
+			elseif movename.Value == "Ultimate Essence" then					
+				Main.HeatMove.TextLabel.Text = "Essence of Desperation"
+				playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", .7, .9)
 			end
 		end
 	end
