@@ -377,10 +377,10 @@ end
 
 if _G.dodconfig.rushMoveset == "7G" then
 	rush.Idle.AnimationId = styles.Tonfa.StanceIdle.AnimationId
-	rush.Run.AnimationId = "http://www.roblox.com/asset/?id=10921320299"
+	rush.Run.AnimationId = "rbxassetid://10921320299"
 end
 
-beast.Run.AnimationId = "http://www.roblox.com/asset/?id=10921240218"
+beast.Run.AnimationId = "rbxassetid://10921240218"
 
 brawler.WalkL:Clone().Parent = rush
 brawler.WalkB:Clone().Parent = rush
@@ -1456,3 +1456,15 @@ if _G.dodconfig.voice then
 end
 
 sendNotification("YAKUZA STYLES LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
+
+brawler.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
+	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
+end
+/
+rush.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
+	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
+end
+
+beast.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
+	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
+end
