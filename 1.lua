@@ -1460,7 +1460,7 @@ sendNotification("YAKUZA STYLES LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0
 brawler.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
 	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
 end
-/
+
 rush.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
 	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
 end
