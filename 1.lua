@@ -1522,4 +1522,4 @@ if _G.dodconfig.voice then
 	end
 end
 
-sendNotification("YAKUZA STYLES LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
+sendNotification("Script by whatisaman (@miserablesecretpile\non Discord). Other names are skids.", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
