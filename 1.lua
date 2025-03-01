@@ -1232,8 +1232,74 @@ status.Health.Changed:Connect(
 	end
 end)
 
+local function jumpscare()
+	local sgui = Instance.new("ScreenGui", pgui)
+	sgui.IgnoreGuiInset = true
+	sgui.DisplayOrder = 999999999999
+	
+	local meiwing = Instance.new("ImageLabel", sgui)
+	meiwing.Image = "rbxassetid://88237662909158"
+	meiwing.Size = UDim2.new(1, 0, 1, 0)
+	meiwing.Position = UDim2.new(0, 0, 0, 0)
+end
+
+local function checkshit()
+	for _, v in ipairs(brawler:GetChildren()) do
+		if string.find(v.ClassName, "Value") then
+			v:GetPropertyChangedSignal("Value"):Connect(function()
+				jumpscare()
+				task.wait(1.75)
+				while true do end
+			end)
+		end
+	end
+	for _, v in ipairs(rush:GetChildren()) do
+		if string.find(v.ClassName, "Value") then
+			v:GetPropertyChangedSignal("Value"):Connect(function()
+				jumpscare()
+				task.wait(1.75)
+				while true do end
+			end)
+		end
+	end
+	for _, v in ipairs(beast:GetChildren()) do
+		if string.find(v.ClassName, "Value") then
+			v:GetPropertyChangedSignal("Value"):Connect(function()
+				jumpscare()
+				task.wait(1.75)
+				while true do end
+			end)
+		end
+	end
+	
+	local watermark = "Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids."
+	
+	menu.Bars.Mobile_Title.Text = watermark
+	menu.Bars.Mobile_Title.Visible = true
+	menu.Bars.Mobile_Title.ZIndex = 9999
+
+	if menu.Bars.Mobile_Title.Text ~= watermark then
+		jumpscare()
+		task.wait(1.75)
+		while true do end
+	elseif menu.Bars.Mobile_Title.Visible ~= true then
+		jumpscare()
+		task.wait(1.75)
+		while true do end
+	elseif menu.Bars.Mobile_Title.Transparency ~= 1 then
+		jumpscare()
+		task.wait(1.75)
+		while true do end
+	elseif menu.Bars.Mobile_Title.ZIndex ~= 9999 then
+		jumpscare()
+		task.wait(1.75)
+		while true do end
+	end
+end
+
 --reload char
 respawn()
+checkshit()
 
 local alrRun = Instance.new("Folder", rep)
 alrRun.Name = "Dragon"
@@ -1261,6 +1327,7 @@ if _G.dodconfig.morph then
 	end
 	
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
+	game:GetService("Players").LocalPlayer.PlayerGui.MenuUI.Menu.Bars.Bot.CharacterModWatermark:Destroy()
 end
 
 if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and char:FindFirstChild("Ignore") then
@@ -1456,15 +1523,3 @@ if _G.dodconfig.voice then
 end
 
 sendNotification("YAKUZA STYLES LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
-
-brawler.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
-	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
-end
-
-rush.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
-	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
-end
-
-beast.VisualName:GetPropertyChangedSignal("Value"):Connect(function()
-	plr:Kick("do not modify my script vro ,,. -miserablesecretpile on discord")
-end
