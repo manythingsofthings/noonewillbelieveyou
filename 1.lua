@@ -1247,7 +1247,10 @@ end
 local function checkshit()
 	for _, v in ipairs(brawler:GetChildren()) do
 		if string.find(v.ClassName, "Value") then
-			v:GetPropertyChangedSignal("Value"):Connect(function()
+			v:GetPropertyChangedSignal("Value"):Connect(function(c)
+				if c.Name == "Strike1" then
+					return
+				end
 				jumpscare()
 				task.wait(1.75)
 				while true do end
