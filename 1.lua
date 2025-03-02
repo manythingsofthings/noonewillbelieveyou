@@ -1201,8 +1201,8 @@ end
 local function checkshit()
 	for _, v in ipairs(brawler:GetChildren()) do
 		if string.find(v.ClassName, "Value") then
-			v:GetPropertyChangedSignal("Value"):Connect(function(c)
-				if c.Name == "Strike1" then return end
+			v:GetPropertyChangedSignal("Value"):Connect(function()
+				if v.Name == "Strike1" then return end
 				jumpscare()
 				task.wait(1.75)
 				while true do end
@@ -1221,14 +1221,16 @@ local function checkshit()
 	for _, v in ipairs(beast:GetChildren()) do
 		if string.find(v.ClassName, "Value") then
 			v:GetPropertyChangedSignal("Value"):Connect(function()
-				if c.Name == "Strike1" then return end
+				if v.Name == "Strike1" then return end
 				jumpscare()
 				task.wait(1.75)
 				while true do end
 			end)
 		end
 	end
-	
+end
+
+local function watermark()
 	local watermark = "Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids."
 	
 	menu.Bars.Mobile_Title.Text = watermark
@@ -1270,6 +1272,7 @@ game:GetService("RunService").RenderStepped:Connect(
 	updateAbil()
 	change_color()
 	styleswitch()
+	watermark()
 end)
 
 --morph setup
