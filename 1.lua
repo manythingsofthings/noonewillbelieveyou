@@ -69,7 +69,7 @@ if _G.dodconfig.moveset ~= "Y0" and _G.dodconfig.moveset ~= "DE" then
 	return
 end
 
-if rep:FindFirstChild("Dragon") then
+if rep:FindFirstChild("YakuzaStyles") then
 	sendNotification("SCRIPT IS ALREADY LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "buzz")
 	return
 end
@@ -569,34 +569,6 @@ styles.BatHolding.H_Standing.Value = "H_SluggerBat"
 brawler.H_FullHeat.Value = "H_GUltimateEssence"
 brawler.H_FullHeat.Name = "H_FullStunned"
 
-local ouryu = brawler:Clone()
-ouryu.Parent = styles
-ouryu.Name = "Ouryu"
-
-local dragon = ouryu:Clone()
-dragon.Parent = styles
-dragon.Name = "Dragon"
-
-for i = 1, 4 do
-	addMove("Rush" .. i, "Dragon", "龍Attack" .. i)
-	addMove("2Strike" .. i + 1, "Dragon", "龍2Strike" .. i)
-end
-
-local dragonF = {
-	[1] = "龍Strike1",
-	[2] = "BStrike2",
-	[3] = "BStrike3",
-	[4] = "BStrike5",
-	[5] = "龍Strike5"
-}
-
-for i = 1, 5 do
-	addMove("Strike" .. i, "Dragon", dragonF[i])
-end
-
-addMove("StanceStrike", "Dragon", "TigerDrop")
-addMove("GrabStrike", "Dragon", "T_FinishingHold1")
-
 --move anims i'm not fucking organizing these
 local rushAnims = {
 	["RPunch2"] = "龍Attack1",
@@ -977,9 +949,6 @@ rds:GetPropertyChangedSignal("Value"):Connect(function()
 		task.wait(.75)
 		rep.IsELO.Value = false
 		char.HumanoidRootPart.Anchored = false
-		replaceStyle("Brawler", "Dragon")
-	else
-		replaceStyle("Brawler", "Ouryu")
 	end
 end)
 
@@ -991,24 +960,9 @@ status.AttackBegan.Changed:Connect(function()
 			task.delay(.8, function()
 				brawler.Strike1.Value = "龍Strike1"
 			end)
-		elseif (status.CurrentMove.Value.Name == "BStrike4" and _G.dodconfig.moveset == "DE") or status.CurrentMove.Value.Name == "龍2Strike4" then
+		elseif (status.CurrentMove.Value.Name == "BStrike4" and _G.dodconfig.moveset == "DE") then
 			brawler.Strike1.Value = "龍Strike5"
 			task.delay(.8, function()
-				brawler.Strike1.Value = "龍Strike1"
-			end)
-		elseif status.CurrentMove.Value.Name == "龍2Strike1" then
-			brawler.Strike1.Value = "BTStrike4"
-			task.delay(.8, function()
-				brawler.Strike1.Value = "龍Strike1"
-			end)
-		elseif status.CurrentMove.Value.Name == "龍2Strike2" then
-			brawler.Strike1.Value = "龍2Strike3"
-			task.delay(.8, function()
-				brawler.Strike1.Value = "龍Strike1"
-			end)
-		elseif status.CurrentMove.Value.Name == "DashAttack" and status.Style.Value == "Brawler" then
-			brawler.Strike1.Value = "RSweep"
-			task.delay(3, function()
 				brawler.Strike1.Value = "龍Strike1"
 			end)
 		elseif status.CurrentMove.Value.Name == "MStrike2" then
@@ -1248,9 +1202,7 @@ local function checkshit()
 	for _, v in ipairs(brawler:GetChildren()) do
 		if string.find(v.ClassName, "Value") then
 			v:GetPropertyChangedSignal("Value"):Connect(function(c)
-				if c.Name == "Strike1" then
-					return
-				end
+				if c.Name == "Strike1" then return end
 				jumpscare()
 				task.wait(1.75)
 				while true do end
@@ -1269,6 +1221,7 @@ local function checkshit()
 	for _, v in ipairs(beast:GetChildren()) do
 		if string.find(v.ClassName, "Value") then
 			v:GetPropertyChangedSignal("Value"):Connect(function()
+				if c.Name == "Strike1" then return end
 				jumpscare()
 				task.wait(1.75)
 				while true do end
@@ -1306,7 +1259,7 @@ respawn()
 checkshit()
 
 local alrRun = Instance.new("Folder", rep)
-alrRun.Name = "Dragon"
+alrRun.Name = "YakuzaStyles"
 
 if brawler:FindFirstChild("H_FullHeat") then
 	brawler.H_FullHeat:Destroy()
