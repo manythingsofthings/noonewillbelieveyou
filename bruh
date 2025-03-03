@@ -820,7 +820,7 @@ char.ChildAdded:Connect(function(c)
 				elseif movename.Value == "Ultimate Essence" then
 					if _G.dodconfig.moveset == "DE" then
 						playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
-						playAnim(humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", .7)
+						playAnim(heating.Value.Humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", .7)
 						yinglong.Transparency = .5
 						task.delay(1/60, function()
 							Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
