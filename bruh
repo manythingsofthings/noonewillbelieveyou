@@ -550,7 +550,6 @@ char.ChildAdded:Connect(
 end)
 
 -- hacts
-addMove("H_GrabStanding", "Brawler", "H_HeadPress")
 addMove("StanceStrike", "Brawler", "CounterHook")
 addMove("H_EvadedF", "Rush", "H_TSpinCounterRight")
 addMove("H_EvadedR", "Rush", "H_FrenzySpinCounter")
@@ -821,15 +820,16 @@ char.ChildAdded:Connect(function(c)
 					end)
 				elseif movename.Value == "Ultimate Essence" then
 					if _G.dodconfig.moveset == "DE" then
-						playAnim(humanoid, moves["H_UltimateEssence"].Anim.AnimationId, "Action4", 1)
-						playAnim(heating.Value.Humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", 1)
-						task.delay(1, function()
-							PlaySound("MassiveSlap")
-						end)
-					else
-						Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
-						yinglong.Transparency = .5
 						playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
+						playAnim(humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", .7)
+						yinglong.Transparency = .5
+						task.delay(1/60, function()
+							Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
+						end)
+					elseif movename.Value == "Y0" then
+						task.delay(1/60, function()
+							Main.HeatMove.TextLabel.Text = "Ultimate Essence '88"
+						end)
 					end
 				elseif movename.Value == "Essence of Fast Footwork [Left]" then
 					task.delay(.5, function()
