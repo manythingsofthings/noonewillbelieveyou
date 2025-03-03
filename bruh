@@ -1,5 +1,5 @@
-local rep = game.ReplicatedStorage
-local plr = game.Players.LocalPlayer
+local rep = game:GetService("ReplicatedStorage")
+local plr = game:GetService("Players").LocalPlayer
 
 local bName
 if _G.dodconfig.moveset == "Y0" then
@@ -21,13 +21,12 @@ local interf = pgui.Interface
 local Main = interf.Battle.Main
 local cas = game:GetService("ContextActionService")
 local uis = game:GetService("UserInputService")
-local rHact = Instance.new("BoolValue", status)
 
 local humanoidRootPart = char.HumanoidRootPart
 local humanoid = char.Humanoid
 local animator = humanoid:FindFirstChildOfClass("Animator")
 
-local rds = Instance.new("BoolValue", status)
+local rds = Instance.new("BoolValue")
 
 --set voicepack
 local voiceset = rep.Voices:FindFirstChild(_G.dodconfig.useVoice)
@@ -508,9 +507,9 @@ end
 -- misc. moves
 addMove("GrabStrike", "Brawler", "T_GuruParry")
 addMove("DashAttack", "Brawler", "龍2Strike4")
+brawler.Grab.Value = "Grab"
 rush.Grab.Value = "BStomp"
 rush.DashAttack.Value = "龍2Strike1"
-beast.Grab.Value = "Grab"
 
 for i = 1, 4 do
 	local Anim = moves["BAttack" .. i].TurnAnim:Clone()
@@ -622,6 +621,7 @@ if _G.dodconfig.moveset == "DE" then
 	moves["BTStrike4"].HitboxLocations.Value = moves["龍Attack4"].HitboxLocations.Value
 end
 
+moves["龍Stomp"].Anim.AnimationId = moves.H_FallenStomp.Anim.AnimationId
 moves["龍Strike5"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike2"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
 moves["FStrike4"].Anim.AnimationId = moves.TigerDrop.Anim.AnimationId
@@ -780,7 +780,6 @@ local hactNames = {
 	["Essence of Knockout [Front]"] = "Essence of Extreme Beast",
 	["Guru Firearm Flip"] = "Komaki Shot Stopper",
 	["Essence of Fisticuffs"] = "Essence of Brawling",
-	["Essence of Whirl"] = "Essence of Mad Dog: Aerial Whirl",
 	["Essence of Beatdown"] = "Essence of Weaponry",
 	["Essence of Chokehold"] = "Essence of Mad Dog: Chokehold",
 }
@@ -891,13 +890,13 @@ local function styleswitch()
 	if status.Style.Value == "Brawler" then
 		if _G.dodconfig.moveset == "Y0" then
 			guyImage.Image = "rbxassetid://77002058287348"
-		else
+		elseif _G.dodconfig.moveset == "DE" then
 			guyImage.Image = "rbxassetid://108063383518240"
 		end
 	elseif status.Style.Value == "Rush" then
 		if _G.dodconfig.rushMoveset == "7G" then
 			guyImage.Image = "rbxassetid://108301240160748"
-		else
+		elseif _G.dodconfig.rushMoveset == "Y0" then
 			guyImage.Image = "rbxassetid://104601719368210"
 		end
 	elseif status.Style.Value == "Beast" then
@@ -1019,7 +1018,6 @@ abilFolder.Brawler["Ultimate Essence"].Prompt.Value = "HEAVY ATTACK near stunned
 local abilDescs = {
 	["Ultimate Essence"] = "The ultimate attack of the Dragon of Dojima. Unleash enough might to crush any opponent.",
 	["Guru Parry"] = "One of many skills in the Komaki style. Parry the enemy's attack and then land a blow to the stomach, or reuse the Twist Counter you haven't used since the Bubble to knock them off-balance in " .. bName .. " Style.",
-	["Counter Hook"] = "One of many skills in the Komaki style. The style's strongest counter-attack. The lower your Heat, the more damage it does.",
 	["Guru Knockback"] = "One of many skills in the Komaki style. Repel an enemy's attack while guarding.",
 	["Resolute Counter"] = bName .. " Style only. You can strike back at enemies attacking you unless you are sent back flying."
 }
@@ -1053,9 +1051,7 @@ local function updateAbil()
 				v.Generic.Label.TextColor3 = DragonColor
 			end
 		end
-		if v.Name == "Counter Hook" then
-			v.Generic.Label.Text = "Komaki Tiger Drop"
-		elseif v.Name == "Guru Knockback" then
+		if v.Name == "Guru Knockback" then
 			v.Generic.Label.Text = "Komaki Knock Back"
 		elseif v.Name == "Ultimate Essence" then
 			if _G.dodconfig.moveset == "DE" then
@@ -1287,6 +1283,7 @@ if _G.dodconfig.morph then
 	end
 	
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
+	game:GetService("Players").LocalPlayer.PlayerGui.MenuUI.Menu.Bars.Bot.CharacterModWatermark:Destroy()
 end
 
 if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and char:FindFirstChild("Ignore") then
