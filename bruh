@@ -910,11 +910,11 @@ status.Style:GetPropertyChangedSignal("Value"):Connect(
 	function()
 	if not char:FindFirstChild("Holding") and isInBattle() then
 		if status.Style.Value == "Brawler" then
-			playAnim(moves["Taunt"].Anim.AnimationId, "Idle", 4)
+			playAnim(humanoid, moves["Taunt"].Anim.AnimationId, "Idle", 4)
 		elseif status.Style.Value == "Rush" then
-			playAnim(rep.Anims.WepEquip.AnimationId, "Idle")
+			playAnim(humanoid, rep.Anims.WepEquip.AnimationId, "Idle")
 		elseif status.Style.Value == "Beast" then
-			playAnim(moves["BeastTaunt"].Anim.AnimationId, "Idle", 4)
+			playAnim(humanoid, moves["BeastTaunt"].Anim.AnimationId, "Idle", 4)
 		end
 	end
 end)
