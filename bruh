@@ -1287,7 +1287,6 @@ if _G.dodconfig.morph then
 	end
 	
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/aAAAakakrvmv192/R2FMods/main/charmorphmod.lua"))()
-	game:GetService("Players").LocalPlayer.PlayerGui.MenuUI.Menu.Bars.Bot.CharacterModWatermark:Destroy()
 end
 
 if _G.dodconfig.morph and _G.Morph == "Legendary Dragon" and char:FindFirstChild("Ignore") then
