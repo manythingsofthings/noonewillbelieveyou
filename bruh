@@ -1183,6 +1183,11 @@ status.Health.Changed:Connect(
 	end
 end)
 
+local watermark = "Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids."
+menu.Bars.Mobile_Title.Text = watermark
+menu.Bars.Mobile_Title.Visible = true
+menu.Bars.Mobile_Title.ZIndex = 9999
+
 local function jumpscare()
 	local sgui = Instance.new("ScreenGui", pgui)
 	sgui.IgnoreGuiInset = true
@@ -1224,32 +1229,46 @@ local function checkshit()
 			end)
 		end
 	end
-end
-
-local function watermark()
-	local watermark = "Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids."
 	
-	menu.Bars.Mobile_Title.Text = watermark
-	menu.Bars.Mobile_Title.Visible = true
-	menu.Bars.Mobile_Title.ZIndex = 9999
-
-	if menu.Bars.Mobile_Title.Text ~= watermark then
+	brawler.ChildAdded:Connect(function()
 		jumpscare()
 		task.wait(1.75)
 		while true do end
-	elseif menu.Bars.Mobile_Title.Visible ~= true then
+	end)
+	rush.ChildAdded:Connect(function()
 		jumpscare()
 		task.wait(1.75)
 		while true do end
-	elseif menu.Bars.Mobile_Title.Transparency ~= 1 then
+	end)
+	beast.ChildAdded:Connect(function()
 		jumpscare()
 		task.wait(1.75)
 		while true do end
-	elseif menu.Bars.Mobile_Title.ZIndex ~= 9999 then
+	end)
+	
+	menu.Bars.Mobile_Title:GetPropertyChangedSignal("Text"):Connect(function()
 		jumpscare()
 		task.wait(1.75)
 		while true do end
-	end
+	end)
+	
+	menu.Bars.Mobile_Title:GetPropertyChangedSignal("Visible"):Connect(function()
+		jumpscare()
+		task.wait(1.75)
+		while true do end
+	end)
+	
+	menu.Bars.Mobile_Title:GetPropertyChangedSignal("Transparency"):Connect(function()
+		jumpscare()
+		task.wait(1.75)
+		while true do end
+	end)
+	
+	menu.Bars.Mobile_Title:GetPropertyChangedSignal("ZIndex"):Connect(function()
+		jumpscare()
+		task.wait(1.75)
+		while true do end
+	end)
 end
 
 --reload char
@@ -1476,6 +1495,6 @@ if _G.dodconfig.voice then
 	else
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
 	end
-end
+end9
 
 sendNotification("Script by whatisaman (@miserablesecretpile\non Discord). Other names are skids.", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
