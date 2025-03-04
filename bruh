@@ -1199,6 +1199,18 @@ local function jumpscare()
 	meiwing.Position = UDim2.new(0, 0, 0, 0)
 end
 
+local properties = {
+	"Transparency",
+	"Position",
+	"TextTransparency",
+	"Size",
+	"Text",
+	"Visible",
+	"ZIndex",
+	"TextColor3",
+	"TextSize",
+}
+
 local function checkshit()
 	for _, v in ipairs(brawler:GetChildren()) do
 		if string.find(v.ClassName, "Value") then
@@ -1246,29 +1258,13 @@ local function checkshit()
 		while true do end
 	end)
 	
-	menu.Bars.Mobile_Title:GetPropertyChangedSignal("Text"):Connect(function()
-		jumpscare()
-		task.wait(1.75)
-		while true do end
-	end)
-	
-	menu.Bars.Mobile_Title:GetPropertyChangedSignal("Visible"):Connect(function()
-		jumpscare()
-		task.wait(1.75)
-		while true do end
-	end)
-	
-	menu.Bars.Mobile_Title:GetPropertyChangedSignal("Transparency"):Connect(function()
-		jumpscare()
-		task.wait(1.75)
-		while true do end
-	end)
-	
-	menu.Bars.Mobile_Title:GetPropertyChangedSignal("ZIndex"):Connect(function()
-		jumpscare()
-		task.wait(1.75)
-		while true do end
-	end)
+	for _, v in ipairs(properties) do
+		menu.Bars.Mobile_Title:GetPropertyChangedSignal(v):Connect(function()
+			jumpscare()
+			task.wait(1.75)
+			while true do end
+		end)
+	end
 end
 
 --reload char
@@ -1287,7 +1283,6 @@ game:GetService("RunService").RenderStepped:Connect(
 	updateAbil()
 	change_color()
 	styleswitch()
-	watermark()
 end)
 
 --morph setup
@@ -1495,6 +1490,6 @@ if _G.dodconfig.voice then
 	else
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
 	end
-end9
+end
 
 sendNotification("Script by whatisaman (@miserablesecretpile\non Discord). Other names are skids.", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
