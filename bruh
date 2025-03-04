@@ -1183,11 +1183,6 @@ status.Health.Changed:Connect(
 	end
 end)
 
-local watermark = "Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids."
-menu.Bars.Mobile_Title.Text = watermark
-menu.Bars.Mobile_Title.Visible = true
-menu.Bars.Mobile_Title.ZIndex = 9999
-
 local function jumpscare()
 	local sgui = Instance.new("ScreenGui", pgui)
 	sgui.IgnoreGuiInset = true
@@ -1198,18 +1193,6 @@ local function jumpscare()
 	meiwing.Size = UDim2.new(1, 0, 1, 0)
 	meiwing.Position = UDim2.new(0, 0, 0, 0)
 end
-
-local properties = {
-	"Transparency",
-	"Position",
-	"TextTransparency",
-	"Size",
-	"Text",
-	"Visible",
-	"ZIndex",
-	"TextColor3",
-	"TextSize",
-}
 
 local function checkshit()
 	for _, v in ipairs(brawler:GetChildren()) do
@@ -1241,29 +1224,31 @@ local function checkshit()
 			end)
 		end
 	end
+end
+
+local function watermark()
+	local watermark = "Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids."
 	
-	brawler.ChildAdded:Connect(function()
+	menu.Bars.Mobile_Title.Text = watermark
+	menu.Bars.Mobile_Title.Visible = true
+	menu.Bars.Mobile_Title.ZIndex = 9999
+
+	if menu.Bars.Mobile_Title.Text ~= watermark then
 		jumpscare()
 		task.wait(1.75)
 		while true do end
-	end)
-	rush.ChildAdded:Connect(function()
+	elseif menu.Bars.Mobile_Title.Visible ~= true then
 		jumpscare()
 		task.wait(1.75)
 		while true do end
-	end)
-	beast.ChildAdded:Connect(function()
+	elseif menu.Bars.Mobile_Title.Transparency ~= 1 then
 		jumpscare()
 		task.wait(1.75)
 		while true do end
-	end)
-	
-	for _, v in ipairs(properties) do
-		menu.Bars.Mobile_Title:GetPropertyChangedSignal(v):Connect(function()
-			jumpscare()
-			task.wait(1.75)
-			while true do end
-		end)
+	elseif menu.Bars.Mobile_Title.ZIndex ~= 9999 then
+		jumpscare()
+		task.wait(1.75)
+		while true do end
 	end
 end
 
@@ -1283,6 +1268,7 @@ game:GetService("RunService").RenderStepped:Connect(
 	updateAbil()
 	change_color()
 	styleswitch()
+	watermark()
 end)
 
 --morph setup
