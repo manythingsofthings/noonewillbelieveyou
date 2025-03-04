@@ -114,7 +114,8 @@ local function replaceStyle(oldStyle, newStyle)
 	end
 end
 
-sendNotification("REAL LEGENDS PLAY UNMODDED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
+sendNotification("Fighter is preparing, please wait warmly…", Color3.new(1, 1, 1), Color3.new(0, 0, 0))
+sendNotification("(REAL LEGENDS PLAY UNMODDED)", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
 
 local function fillHeat(howmany)
 	for i = 1, howmany , 1 do
