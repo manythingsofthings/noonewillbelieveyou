@@ -1177,8 +1177,13 @@ status.Health.Changed:Connect(
 		local arena = status.MyArena.Value
 		if arena then
 			if arena:FindFirstChild("AI"):FindFirstChild("Object") and arena.AI.Object.Value and arena.AI.Object.Value.Name == "Legendary Dragon" and _G.dodconfig.morph then
-				sendNotification('I wish for you to be at peace."')
-				sendNotification('"Whatever happens to me...')
+				if _G.dodconfig.custommorph ~= "2hu" and _G.Morph == "Legendary Dragon" then
+					sendNotification('I wish for you to be at peace."')
+					sendNotification('"Whatever happens to me...')
+				else
+					sendNotification('in dragons after all."')
+					sendNotification('"I guess adults can believe')
+				end
 			end
 		end
 	end
