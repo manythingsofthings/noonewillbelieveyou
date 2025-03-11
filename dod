@@ -471,6 +471,8 @@ local function IsInPvp()
 	end
 end
 
+if IsInPvp() then plr:Kick("no") task.wait(2) while true do end end
+
 local function respawn()
 	local oldcframe = char.HumanoidRootPart.CFrame
 	interf.Client.Disabled = true
