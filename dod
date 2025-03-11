@@ -471,8 +471,6 @@ local function IsInPvp()
 	end
 end
 
-if IsInPvp() then plr:Kick("no") task.wait(2) while true do end end
-
 local function respawn()
 	local oldcframe = char.HumanoidRootPart.CFrame
 	interf.Client.Disabled = true
@@ -1154,11 +1152,27 @@ char.ChildAdded:Connect(function(c)
 						end)
 					end
 				elseif movename.Value == "Ultimate Essence" then
-					playAnim(humanoid, moves["H_UltimateEssence"].Anim.AnimationId, "Action4", 1)
-					task.delay(1, function()
-						PlaySound("MassiveSlap")
-					end)
-					playAnim(heating.Value.Humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", 1)
+					if isOuryu() then
+						if _G.moveset == "DE" then
+							playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
+							playAnim(heating.Value.Humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4")
+							yinglong.Transparency = .5
+							task.delay(1/60, function()
+								Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
+							end)
+						else
+							task.delay(1/60, function()
+								Main.HeatMove.TextLabel.Text = "Ultimate Essence '88"
+							end)
+						end
+					else
+						playAnim(humanoid, moves["H_UltimateEssence"].Anim.AnimationId, "Action4")
+						playAnim(heating.Value.Humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4")
+						
+						task.delay(2, function()
+							PlaySound("MassiveSlap")
+						end)
+					end
 				elseif movename.Value == "Essence of Fast Footwork [Left]" and not char:FindFirstChild("BeingHeated") then
 					task.delay(.5, function()
 						playAnim(humanoid, moves["H_TSpinCounterRight"].Anim.AnimationId, "Action4", 1)
@@ -1898,8 +1912,6 @@ interf.BattleStart.Position = UDim2.new(0.5, 0, 0.5, 0)
 
 pgui.EInterface.EnemyHP.BG.Meter.HPTxt.Visible = false
 pgui.EInterface.EnemyHP.BG.Meter.Rotation = 180
-
-interf.EndGood.Value = getsynasset("dragonstyle/end.wav")
 
 local watermark = 'Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids.'
 menu.Bars.Mobile_Title.Text = watermark
