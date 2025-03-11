@@ -613,11 +613,11 @@ local dspF = {
 	"BStrike2",
 	"龍Strike5",
 	"B2Strike2",
-	"龍2Strike3",
-	"龍2Strike3",
-	"龍2Strike3",
-	"龍2Strike3",
-	"龍2Strike3",
+	"BTStrike3",
+	"BTStrike3",
+	"BTStrike3",
+	"BTStrike3",
+	"BTStrike3",
 }
 
 dsp.DoubleBlows:Destroy()
@@ -838,6 +838,7 @@ moves["BStrike5"].Anim.AnimationId = moves["龍2Strike1"].Anim.AnimationId
 moves["MStrike2"].Anim.AnimationId = moves["H_FallenKick"].Anim.AnimationId
 moves["GuruStumble"].Anim.AnimationId = moves["龍Attack4"].Anim.AnimationId
 moves["龍2Strike3"].Anim.AnimationId = moves.BEvadeStrikeBack.Anim.AnimationId
+moves["BTStrike3"].Anim.AnimationId = moves.BEvadeStrikeBack.Anim.AnimationId
 moves["B2Strike2"].Anim.AnimationId = moves["BStrike3"].TurnAnim.AnimationId
 moves["B2Strike3"].Anim.AnimationId = moves["BAttack4"].TurnAnim.AnimationId
 moves["BEvadeStrikeLeft"].Anim.AnimationId = "rbxassetid://10848059240"
@@ -874,6 +875,12 @@ moves["BEvadeStrikeLeft"].HitboxLocations.Value = moves.BAttack2.HitboxLocations
 moves["BEvadeStrikeRight"].HitboxLocations.Value = moves.BAttack1.HitboxLocations.Value
 moves["龍TigerDrop"].HSize.Value = moves["龍GTigerDrop"].HSize.Value
 moves["BStrike5"].AniSpeed.Value = moves["BStrike5"].AniSpeed.Value + 0.05
+moves["BTStrike3"].AniSpeed.Value = 1.5
+moves["龍2Strike3"].MoveForward.Value = moves.BEvadeStrikeBack.MoveForward.Value
+moves["龍2Strike3"].MoveDuration.Value = moves.BEvadeStrikeBack.MoveDuration.Value
+moves["BTStrike3"].MoveForward.Value = moves.BEvadeStrikeBack.MoveForward.Value
+moves["BTStrike3"].MoveDuration.Value = moves.BEvadeStrikeBack.MoveDuration.Value
+moves["BTStrike3"].HitboxLocations.Value = moves.BEvadeStrikeBack.HitboxLocations.Value
 
 moves.BStrike5.TurnAnim:Destroy()
 moves.BStrike5.THitboxLocations:Destroy()
