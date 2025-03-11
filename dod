@@ -1,3 +1,4 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/nuh-uh/refs/heads/main/wl.lua"))();
 local rep = game.ReplicatedStorage
 local plr = game.Players.LocalPlayer
 
@@ -1884,23 +1885,6 @@ interf.BattleStart:GetPropertyChangedSignal("Text"):Connect(
 			interf.BattleStart.Text = "KAZUMA KIRYU"
 		else
 			interf.BattleStart.Text = "堂島の龍"
-		end
-	end
-end)
-
-status.Health.Changed:Connect(
-	function()
-	if status.Health.Value <= 0 then
-		task.wait()
-		if not plr.Character:FindFirstChild("ImaDea") then
-			return
-		end
-		local arena = status.MyArena.Value
-		if arena then
-			if arena:FindFirstChild("AI"):FindFirstChild("Object") and arena.AI.Object.Value and arena.AI.Object.Value.Name == "Legendary Dragon" and _G.dodconfig.morph then
-				sendNotification('I wish for you to be at peace."')
-				sendNotification('"Whatever happens to me...')
-			end
 		end
 	end
 end)
