@@ -1,4 +1,3 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/nuh-uh/refs/heads/main/wl.lua"))();
 local rep = game.ReplicatedStorage
 local plr = game.Players.LocalPlayer
 
@@ -162,17 +161,6 @@ end
 
 sendNotification("Fighter is preparing, please wait warmly…", Color3.new(1, 1, 1), Color3.new(0, 0, 0))
 sendNotification("(REAL LEGENDS PLAY UNMODDED)", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
-
-if not isfolder("dragonstyle") then
-	makefolder("dragonstyle")
-end
-
-if not isfile("dragonstyle/end.wav") then
-	writefile("dragonstyle/end.wav", game:HttpGet("https://github.com/manythingsofthings/r2f-ps2kiryu-voice-mod/blob/main/files/Yakuza_(USA)_13134.wav?raw=true"))
-end
-if not isfile("dragonstyle/qte.wav") then
-	writefile("dragonstyle/qte.wav", game:HttpGet("https://github.com/manythingsofthings/r2f-ps2kiryu-voice-mod/blob/main/files/Yakuza_(USA)_13141.wav?raw=true"))
-end
 
 local function fillHeat(howmany)
 	for i = 1, howmany , 1 do
@@ -468,6 +456,13 @@ local function IsInPvp()
 		return true
 	else
 		return false
+	end
+end
+
+if IsInPvp() then
+	local S_hwid = game:GetService("RbxAnalyticsService"):GetClientId() or "Unknown"
+	if S_hwid ~= "b5da7edf-f976-4636-8f31-dcc385f09d08" then
+		PlaySound("Teleport")
 	end
 end
 
