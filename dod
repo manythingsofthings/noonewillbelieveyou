@@ -1,4 +1,3 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/nuh-uh/refs/heads/main/wl.lua"))();
 local rep = game.ReplicatedStorage
 local plr = game.Players.LocalPlayer
 
@@ -1679,7 +1678,7 @@ local abilDescs = {
 	["Resolute Counter"] = "Dragon of Dojima Style only. You can strike back at enemies attacking you unless you are sent back flying."
 }
 
-abil.Tabs.Tabs.Brawler.Filled.Title.Text = 'Dragon / ' .. bName
+abil.Tabs.Tabs.Brawler.Filled.Title.Text = "Dragon / " .. bName
 abil.Tabs.Tabs.Rush.Filled.Title.Text = "Rush"
 abil.Tabs.Tabs.Beast.Filled.Title.Text = "Beast"
 
