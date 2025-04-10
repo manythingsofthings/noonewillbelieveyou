@@ -1189,7 +1189,7 @@ status.Health.Changed:Connect(
 	end
 end)
 
-local watermark = "Yakuza Styles by whatisaman (@miserablesecretpile on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and miserablesecretpile. Other names are skids."
+local watermark = "Yakuza Styles by whatisaman (@whatisaman.r2f on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and whatisaman.r2f. Other names are skids."
 menu.Bars.Mobile_Title.Text = watermark
 menu.Bars.Mobile_Title.Visible = true
 menu.Bars.Mobile_Title.ZIndex = 9999
