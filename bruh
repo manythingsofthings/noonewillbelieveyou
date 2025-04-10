@@ -1305,8 +1305,8 @@ if _G.dodconfig.voice then
 	if _G.dodconfig.useVoice == "ps2Kiryu" then
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/soundshit/refs/heads/main/spaghetticode.lua"))()
 	else
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/manythingsofthings/totally-legitimate-mm2-scripts/refs/heads/main/voice.lua"))()
+		sendNotification("Removed voice (base script was not mine)")
 	end
 end
 
-sendNotification("Script by whatisaman (@miserablesecretpile\non Discord). Other names are skids.", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
+sendNotification("Script by whatisaman (@whatisaman.r2f\non Discord). Other names are skids.", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "HeatDepleted")
