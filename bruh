@@ -63,11 +63,6 @@ local function sendNotification(text, color, stroke, sound)
 	end
 end
 
-if _G.dodconfig.moveset ~= "Y0" and _G.dodconfig.moveset ~= "DE" then
-	sendNotification("BRAWLER MOVESET IS INVALID", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "buzz")
-	return
-end
-
 if rep:FindFirstChild("YakuzaStyles") then
 	sendNotification("SCRIPT IS ALREADY LOADED", Color3.new(1, 0, 0), Color3.new(0, 0, 0), "buzz")
 	return
@@ -222,6 +217,8 @@ local function PlaySound(SoundName) -- rplaysound
 	})
 end
 
+local playSound = PlaySound
+
 local function fetchRandom(instance)
 	local instancechildren = instance:GetChildren()
 	local random = instancechildren[math.random(1, # instancechildren)]
@@ -249,10 +246,15 @@ end
 
 local ts = game:GetService("TweenService")
 
+local animCache = {}
 local function playAnim(sub, anim, pri, spd, dur)
-	local animation = Instance.new("Animation", char)
-	animation.AnimationId = anim
-	local track = sub:LoadAnimation(animation)
+	if not animCache[anim] then
+		local animation       = Instance.new("Animation", char)
+		animation.AnimationId = anim
+		animCache[anim]       = animation
+	end
+	
+	local track    = sub:LoadAnimation(animCache[anim])
 	track.Priority = Enum.AnimationPriority[pri]
 	track:Play()
 	
@@ -263,22 +265,24 @@ local function playAnim(sub, anim, pri, spd, dur)
 	if dur then
 		task.delay(dur, function()
 			track:Stop()
-			animation:Destroy()
 			track:Destroy()
 		end)
 	end
 	
 	track.Ended:Connect(function()
 		track:Destroy()
-		animation:Destroy()
 	end)
 	
 	char.ChildRemoved:Connect(function(c)
 		if c.Name == "Heated" then
 			track:Stop()
 			track:Destroy()
-			animation:Destroy()
 		end
+	end)
+	
+	status.CurrentMove.Changed:Connect(function()
+		track:Stop()
+		track:Destroy()
 	end)
 end
 
@@ -425,13 +429,13 @@ end
 
 -- rush combos
 -- brawler.StanceStrike.Value = "龍GTigerDrop"
-if _G.dodconfig.moveset == "DE" then
-	brawler.Rush3.Value = "BAttack2"
-	brawler.Rush4.Value = "FPunch1"
-else
+if _G.dodconfig.moveset == "Y0" then
 	for i = 1, 4 do
 		brawler["Rush" .. i].Value = "BAttack" .. i
 	end
+else
+	brawler.Rush3.Value = "BAttack2"
+	brawler.Rush4.Value = "FPunch1"
 end
 
 rush.Rush6.Value = "龍Attack4"
@@ -623,18 +627,20 @@ if _G.dodconfig.moveset == "DE" then
 end
 
 moves["龍Stomp"].Anim.AnimationId = moves.H_FallenStomp.Anim.AnimationId
-moves["龍Strike5"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
-moves["FStrike2"].Anim.AnimationId = moves.BStrike1.TurnAnim.AnimationId
+moves["龍Strike5"].Anim.AnimationId = "rbxassetid://13785065919"
+moves["FStrike2"].Anim.AnimationId = "rbxassetid://13785065919"
 moves["FStrike4"].Anim.AnimationId = moves.TigerDrop.Anim.AnimationId
 moves["FPunch1"].Anim.AnimationId = "rbxassetid://11464955887"
 moves["龍Strike1"].Anim.AnimationId = moves.BStomp.Anim.AnimationId
 moves["龍2Strike4"].Anim.AnimationId = moves.RPunch7.Anim.AnimationId
 moves["BStrike5"].Anim.AnimationId = moves["龍2Strike1"].Anim.AnimationId
-moves["B2Strike1"].Anim.AnimationId = moves.BEvadeStrikeBack.Anim.AnimationId
+moves["B2Strike1"].Anim.AnimationId = "rbxassetid://12481294601"
 moves["B2Strike2"].Anim.AnimationId = moves["BStrike3"].TurnAnim.AnimationId
 moves["B2Strike3"].Anim.AnimationId = moves["BAttack4"].TurnAnim.AnimationId
 moves["BEvadeStrikeLeft"].Anim.AnimationId = "rbxassetid://10848059240"
 moves["BEvadeStrikeRight"].Anim.AnimationId = "rbxassetid://10848057381"
+moves["BEvadeStrikeForward"].Anim.AnimationId = "rbxassetid://11518211581"
+moves["BEvadeStrikeBack"].Anim.AnimationId = "rbxassetid://12481294601"
 moves["BAttack4"].Anim.AnimationId = "rbxassetid://11593137190"
 moves["MStrike2"].Anim.AnimationId = moves["H_FallenKick"].Anim.AnimationId
 moves["TigerDrop"].Anim.AnimationId = moves["BAttack2"].TurnAnim.AnimationId
@@ -786,94 +792,72 @@ local hactNames = {
 }
 
 -- custom heat actions
-char.ChildAdded:Connect(function(c)
-	if c.Name == "Heated" then
-		local movename = c:WaitForChild("MoveName", 1/60)
-		local heating = c:WaitForChild("Heating", 1/60)
-		
-		if movename then
-			if heating then
-				if hactNames[movename.Value] then
-					task.delay(1/60, function()
-						Main.HeatMove.TextLabel.Text = hactNames[movename.Value]
+local function hacts()
+	local heatedFol = char:FindFirstChild("Heated")
+	if not heatedFol then
+		heated = false
+		return
+	end
+	local movename = heatedFol:FindFirstChild("MoveName")
+	if not movename then
+		heated = false
+		return
+	else
+		local mn = char.Heated.MoveName.Value
+		if heated == true then return end
+		heated = true
+		if not char:FindFirstChild("BeingHeated") then
+			local heating = heatedFol.Heating.Value.Humanoid
+
+			if mn == "Essence of Frenzy" then
+				Main.HeatMove.TextLabel.Text = "Essence of Extreme Rush"
+				playAnim(humanoid, moves["H_Tonfa"].Anim.AnimationId, "Action4")
+				playAnim(heating, moves["H_Tonfa"].Victim1.AnimationId, "Action4")
+				local slapTimes = {
+					0,
+					.7,
+					1,
+					1.3,
+					1.6,
+				}
+				for _, t in ipairs(slapTimes) do
+					task.delay(t, function()
+						playSound("Slap")
 					end)
-				elseif movename.Value == "Essence of Frenzy" then
-					Main.HeatMove.TextLabel.Text = "Essence of Extreme Rush"
-					playAnim(humanoid, moves["H_Tonfa"].Anim.AnimationId, "Action4", 1)
-					playAnim(heating.Value.Humanoid, moves["H_Tonfa"].Victim1.AnimationId, "Action4", 1)
-					local slapTimes = {
-						0,
-						.7,
-						1,
-						1.3,
-						1.6,
-						1.9
-					}
-					for _, t in ipairs(slapTimes) do
-						task.delay(t, function()
-							PlaySound("Slap")
-						end)
-					end
-			
-					task.delay(1.9, function()
-						PlaySound("MassiveSlap")
-					end)
-				elseif movename.Value == "Ultimate Essence" then
-					if _G.dodconfig.moveset == "DE" then
-						playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", .7)
-						playAnim(heating.Value.Humanoid, moves["H_UltimateEssence"].Victim1.AnimationId, "Action4", .7)
-						yinglong.Transparency = .5
-						task.delay(1/60, function()
-							Main.HeatMove.TextLabel.Text = "Essence of the Dragon God"
-						end)
-					elseif movename.Value == "Y0" then
-						task.delay(1/60, function()
-							Main.HeatMove.TextLabel.Text = "Ultimate Essence '88"
-						end)
-					end
-				elseif movename.Value == "Essence of Fast Footwork [Left]" then
-					task.delay(.5, function()
-						playAnim(humanoid, moves["H_TSpinCounterRight"].Anim.AnimationId, "Action4", 1)
-					end)
-				elseif movename.Value == "Essence of Rolling" then
-					task.delay(.5, function()
-						playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", 1)
-					end)
-				elseif movename.Value == "Essence of Crushing" then
-					task.delay(1/60, function()
-						Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
-					end)
-					task.delay(.5, function()
-						playAnim(humanoid, moves["H_FallenProne"].Anim.AnimationId, "Action4", 1)
-					end)
-				elseif status.Style.Value == "Rush" and movename.Value == "Komaki Fist Reversal [Right]" then
-					task.delay(1/60, function()
-						Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
-					end)
-				elseif status.Style.Value == "Brawler" and movename.Value == "Essence of Head Press: Prone" then
-					task.delay(1/60, function()
-						Main.HeatMove.TextLabel.Text = "Essence of Might"
-					end)
-				elseif movename.Value == "Essence of Whirl" then
-					task.delay(1/60, function()
-						Main.HeatMove.TextLabel.Text = "Essence of Mad Dog: Whirl"
-					end)
-					playAnim(humanoid, "rbxassetid://11409668605", "Action4", 1)
-					playAnim(heating.Value.Humanoid, "rbxassetid://11409670145", "Action4", 1)
 				end
-			elseif movename.Value == "Ultimate Essence" then					
+		
+				task.delay(1.9, function() playSound("MassiveSlap") end)
+			elseif mn == "Essence of Fast Footwork [Left]" then
+				task.delay(.5, function() playAnim(humanoid, moves["H_TSpinCounterRight"].Anim.AnimationId, "Action4", 1) end)
+			elseif mn == "Essence of Rolling" then
+				task.delay(.5, function() playAnim(humanoid, "rbxassetid://12747380309", "Action4", 1.35) end)
+			elseif mn == "Essence of Crushing" then
+				Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Right]"
+				playAnim(humanoid, moves.H_TSpinCounterBack.Anim.AnimationId, "Action4")
+			elseif mn == "Komaki Fist Reversal [Right]" and status.Style.Value == "Rush" then
+				Main.HeatMove.TextLabel.Text = "Essence of Fast Footwork [Front]"
+			elseif status.Style.Value == "Brawler" and mn == "Essence of Head Press: Prone" then
+				Main.HeatMove.TextLabel.Text = "Essence of Might"
+			elseif mn == "Essence of Beatdown" and not char:FindFirstChild("BeingHeated") then
+				for _, p in ipairs(char:GetChildren()) do
+					if string.find(p.Name, "wep_") or string.find(p.Name, "prop_") then
+						Main.HeatMove.TextLabel.Text = "Essence of Weaponry"
+					end
+				end
+			end
+		else
+			if mn == "Ultimate Essence" then
 				Main.HeatMove.TextLabel.Text = "Essence of Desperation"
 				playAnim(humanoid, moves["H_Whirl"].Anim.AnimationId, "Action4", .7, .9)
 			end
 		end
 	end
-end)
+end
 
 char.ChildRemoved:Connect(
 	function(c)
 	if c.Name == "Heated" then
 		yinglong.Transparency = 1
-		rHact.Value = false
 	end
 end)
 
@@ -945,7 +929,7 @@ rds:GetPropertyChangedSignal("Value"):Connect(function()
 		end
 		char.HumanoidRootPart.Anchored = true
 		rep.IsELO.Value = true
-		playAnim(anim, "Action4", speed, .75)
+		playAnim(humanoid, anim, "Action4", speed, .75)
 		task.wait(.75)
 		rep.IsELO.Value = false
 		char.HumanoidRootPart.Anchored = false
@@ -1189,7 +1173,7 @@ status.Health.Changed:Connect(
 	end
 end)
 
-local watermark = "Yakuza Styles by whatisaman (@whatisaman.r2f on Discord). If you bought this script, you were scammed.\nI only go by whatisaman, whatisaman-r2f and whatisaman.r2f. Other names are skids."
+local watermark = "Kiryu Styles by whatisaman (@whatisaman.r2f on Discord). If you bought this script, you were scammed."
 menu.Bars.Mobile_Title.Text = watermark
 menu.Bars.Mobile_Title.Visible = true
 menu.Bars.Mobile_Title.ZIndex = 9999
@@ -1287,6 +1271,7 @@ end
 
 game:GetService("RunService").RenderStepped:Connect(
 	function()
+	hacts()
 	updateAbil()
 	change_color()
 	styleswitch()
@@ -1297,7 +1282,7 @@ local characterToChange = "Your Avatar"
 local characterToChangeTo = "Kiryu Morph"
 
 if _G.dodconfig.morph then
-	sendNotification("Removed morph (base script was not mine)")
+	sendNotification("morph coming soon trust")
 end
 
 --voice mod
