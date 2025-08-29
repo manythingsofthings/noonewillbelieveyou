@@ -603,6 +603,8 @@ end
 for i = 1, 4 do
 	moves["BAttack" .. i].TurnAnim:Clone().Parent = moves["龍Attack" .. i]
 	moves["BAttack" .. i].THitboxLocations:Clone().Parent = moves["龍Attack" .. i]
+	moves[brawler["Rush" .. i].Value].AniSpeed.Value = moves[brawler["Rush" .. i].Value].AniSpeed.Value + .075
+	moves[brawler["Rush" .. i].Value].ComboAt.Value = moves[brawler["Rush" .. i].Value].ComboAt.Value - .075
 end
 
 moves["BTStrike4"].Anim.AnimationId = moves["BStrike4"].TurnAnim.AnimationId
@@ -617,7 +619,7 @@ moves.BTStrike2.AniSpeed.Value = 1.15
 moves.BTStrike2.HitDur.Value = moves["BStrike4"].HitDur.Value
 moves.BTStrike2.HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
 
-if _G.dodconfig.moveset == "DE" then
+if _G.dodconfig.moveset ~= "Y0" then
 	moves["BStrike4"].Anim.AnimationId = moves["BStrike4"].TurnAnim.AnimationId
 	moves["BStrike4"].HitboxLocations.Value = moves.BStrike4.THitboxLocations.Value
 	moves.BStrike4.AniSpeed.Value = 1.15
@@ -875,7 +877,7 @@ local function styleswitch()
 	if status.Style.Value == "Brawler" then
 		if _G.dodconfig.moveset == "Y0" then
 			guyImage.Image = "rbxassetid://77002058287348"
-		elseif _G.dodconfig.moveset == "DE" then
+		else
 			guyImage.Image = "rbxassetid://108063383518240"
 		end
 	elseif status.Style.Value == "Rush" then
