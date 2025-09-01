@@ -993,7 +993,7 @@ status.CurrentMove.Changed:Connect(function()
 	if status.CurrentMove.Value.Name == "BStrike3" and status.Style.Value == "Brawler" then
 		if rds.Value then return end
 		playAnim(humanoid, moves["GAttack3"].Anim.AnimationId, "Action4", 1)
-	elseif status.CurrentMove.Value.Name == "BStrike3" and status.Style.Value == "Brawler" then
+	elseif status.CurrentMove.Value.Name == "龍2Strike4" and status.Style.Value == "Brawler" then
 		if not rds.Value then return end
 		playAnim(humanoid, "rbxassetid://14404369697", "Action4", 1)
 	end
