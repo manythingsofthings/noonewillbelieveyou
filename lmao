@@ -1,0 +1,143 @@
+-- initial setup
+local rep     = game:GetService("ReplicatedStorage")
+local repFir  = game:GetService("ReplicatedFirst")
+local plr     = game:GetService("Players").LocalPlayer
+local ME      = rep.Events.ME
+local styles  = rep.Styles
+local rush    = styles.Rush
+local brawler = styles.Brawler
+local beast   = styles.Beast
+local moves   = rep.Moves
+local char    = plr.Character
+local hrp     = char.HumanoidRootPart
+local pgui    = plr.PlayerGui
+local status  = plr.Status
+local interf  = pgui.Interface
+local Main    = interf.Battle.Main
+local cas     = game:GetService("ContextActionService")
+local uis     = game:GetService("UserInputService")
+local rs      = game:GetService("RunService")
+
+local humanoidRootPart = char.HumanoidRootPart
+local humanoid         = char.Humanoid
+local animator         = humanoid.Animator
+
+local function isInBattle()
+	return (plr:FindFirstChild("InBattle") and true or false)
+end
+
+-- oh boy
+local function depleteHeat(howmany)
+	for i = 1, howmany , 1 do
+		local A_2 = {
+			[1] = {
+				[1] = "evade",
+				[3] = false,
+				[4] = true
+			}
+		}
+		ME:FireServer(unpack(A_2))
+	end
+end
+
+function checkArgs(args)
+	if typeof(args[1]) == "table" then
+		if args[1][1] == "damage" then
+			if args[1][3] == hrp then
+				if string.find(args[1][5].Name, "Drop") and args[1][5] ~= moves.HueDrop then return end
+				
+				for i = 1, 4 do
+					if args[1][2].Parent.Name:sub(1, 4) == "wep_" then return end
+				end
+				
+				if string.find(args[1][5].Name, "Strike") or string.find(args[1][5].Name, "kPunch") or string.find(args[1][5].Name, "GAttack") or string.find(args[1][5].Name, "Charge") then
+					if string.find(args[1][5].Name, "Strike1") then return end
+					args[1][5] = moves["BTCounter"]
+				elseif args[1][5] == moves.HueDrop or args[1][5] == moves.GoAway then
+					args[1][5] = moves["TigerDrop"]
+				elseif args[1][5] == moves.ParkerDrop then
+					args[1][5] = moves["龍TigerDrop"]
+				elseif args[1][5] == moves["龍TigerDrop"] then
+					args[1][5] = moves["龍GTigerDrop"]
+				else
+					args[1][5] = moves["BTPunch1"]
+				end
+			else
+				if string.find(args[1][5].Name, "Attack") or string.find(args[1][5].Name, "Strike1") then
+					args[1][5] = moves["RStrike1"]
+				elseif string.find(args[1][5].Name, "Strike") then
+					args[1][5] = moves["RStrike2"]
+				elseif string.find(args[1][5].Name, "Drop") or string.find(args[1][5].Name, "Hook") then
+					args[1][5] = moves["BStrike4"]
+				end
+			end
+		end
+	end
+	return args
+end
+
+local processingEvent = false
+
+local originalNamecall
+originalNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+	local method = getnamecallmethod()
+	local args   = {
+  		...
+	}
+	if self == ME and method:lower() == "fireserver" and typeof(args[1]) == "table" then
+		if processingEvent then
+			return originalNamecall(self, unpack(args)) -- Avoid reprocessing modified events
+		end
+		processingEvent = true
+		args = checkArgs(args)
+		processingEvent = false
+	end
+	return originalNamecall(self, unpack(args))
+end)
+
+-- no drop iframes
+for _, move in pairs (moves:GetChildren()) do
+	if string.find(move.Name, "Drop") or string.find(move.Name, "Hook") then
+		if move:FindFirstChild("Invulnerable") then
+			move.Invulnerable:Destroy()
+		end
+	end
+end
+
+-- heat drain
+status.CurrentMove.Changed:Connect(function()
+	if string.find(status.CurrentMove.Value.Name, "2Strike") then
+		depleteHeat(4)
+	end
+end)
+
+local function fiveSecDrain()
+	while true do
+		if isInBattle() then
+			depleteHeat(1)
+		end
+		task.wait(3)
+	end
+end
+
+task.spawn(fiveSecDrain)
+
+-- misc
+local perfCl = interf.Perf2:Clone()
+perfCl.Parent = interf
+perfCl.Name = "perfCl"
+
+interf.Perf2.TextTransparency = 1
+
+local function changeShit()
+	perfCl.Text = "Difficulty: " .. status.Settings.Difficulty.Value
+	if status.Settings.Difficulty.Value == "Legend" then
+		perfCl.Text = "Difficulty: Lunatic"
+		pgui.MenuUI.Menu.Settings.Frame.Difficulty.Difficulty.Text = "LUNATIC"
+	end
+end
+changeShit()
+
+interf.Perf2.Changed:Connect(changeShit)
+status.Settings.Difficulty.Changed:Connect(changeShit)
+pgui.MenuUI.Menu.Settings.Frame.Difficulty.Difficulty.Changed:Connect(changeShit)
