@@ -1,3 +1,6 @@
+local toggle = false
+if toggle == false then return end
+
 -- initial setup
 local rep     = game:GetService("ReplicatedStorage")
 local repFir  = game:GetService("ReplicatedFirst")
@@ -41,6 +44,7 @@ local function depleteHeat(howmany)
 end
 
 function checkArgs(args)
+	if status.Settings.Difficulty.Value ~= "Legend" then return end
 	if typeof(args[1]) == "table" then
 		if args[1][1] == "damage" then
 			if args[1][3] == hrp then
@@ -132,7 +136,7 @@ interf.Perf2.TextTransparency = 1
 local function changeShit()
 	perfCl.Text = "Difficulty: " .. status.Settings.Difficulty.Value
 	if status.Settings.Difficulty.Value == "Legend" then
-		perfCl.Text = "Difficulty: Lunatic (by whatisaman)"
+		perfCl.Text = "Difficulty: Lunatic"
 		pgui.MenuUI.Menu.Settings.Frame.Difficulty.Difficulty.Text = "LUNATIC"
 	end
 end
