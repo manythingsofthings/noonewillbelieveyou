@@ -132,7 +132,7 @@ interf.Perf2.TextTransparency = 1
 local function changeShit()
 	perfCl.Text = "Difficulty: " .. status.Settings.Difficulty.Value
 	if status.Settings.Difficulty.Value == "Legend" then
-		perfCl.Text = "Difficulty: Lunatic"
+		perfCl.Text = "Difficulty: Lunatic (by whatisaman)"
 		pgui.MenuUI.Menu.Settings.Frame.Difficulty.Difficulty.Text = "LUNATIC"
 	end
 end
