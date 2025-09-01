@@ -995,7 +995,7 @@ status.CurrentMove.Changed:Connect(function()
 		playAnim(humanoid, moves["GAttack3"].Anim.AnimationId, "Action4", 1)
 	elseif status.CurrentMove.Value.Name == "BStrike3" and status.Style.Value == "Brawler" then
 		if not rds.Value then return end
-		playAnim(humanoid, "bxassetid://14404369697", "Action4", 1)
+		playAnim(humanoid, "rbxassetid://14404369697", "Action4", 1)
 	end
 end)
 
