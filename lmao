@@ -1,5 +1,3 @@
-local toggle = false
-if toggle == false then return end
 
 -- initial setup
 local rep     = game:GetService("ReplicatedStorage")
