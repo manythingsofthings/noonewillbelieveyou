@@ -247,14 +247,22 @@ end
 local ts = game:GetService("TweenService")
 
 local animCache = {}
+local trackCache = {}
 local function playAnim(sub, anim, pri, spd, dur)
 	if not animCache[anim] then
-		local animation       = Instance.new("Animation", char)
+		local animation       = Instance.new("Animation")
 		animation.AnimationId = anim
 		animCache[anim]       = animation
 	end
 	
-	local track    = sub:LoadAnimation(animCache[anim])
+	local key = sub:GetDebugId() .. anim
+	local track = trackCache[key]
+	
+	if not track or track.IsPlaying == false then
+		track = sub:LoadAnimation(animCache[anim])
+		trackCache[key] = track
+	end
+	
 	track.Priority = Enum.AnimationPriority[pri]
 	track:Play()
 	
@@ -264,25 +272,18 @@ local function playAnim(sub, anim, pri, spd, dur)
 	
 	if dur then
 		task.delay(dur, function()
-			track:Stop()
-			track:Destroy()
+			if track.IsPlaying then track:Stop() end
 		end)
 	end
-	
-	track.Ended:Connect(function()
-		track:Destroy()
-	end)
 	
 	char.ChildRemoved:Connect(function(c)
 		if c.Name == "Heated" then
 			track:Stop()
-			track:Destroy()
 		end
 	end)
 	
 	status.CurrentMove.Changed:Connect(function()
 		track:Stop()
-		track:Destroy()
 	end)
 end
 
@@ -382,7 +383,7 @@ end
 
 if _G.dodconfig.rushMoveset == "7G" then
 	rush.Idle.AnimationId = styles.Tonfa.StanceIdle.AnimationId
-	rush.Run.AnimationId = "rbxassetid://10921320299"
+	rush.Run.AnimationId = "rbxassetid://122698959016442"
 end
 
 beast.Run.AnimationId = "rbxassetid://10921240218"
@@ -505,6 +506,8 @@ if _G.dodconfig.moveset == "DE" then
 else
 	brawler.Strike4.Value = "BStrike4"
 	brawler.Strike5.Value = "FStrike4"
+	brawler["2Strike2"].Value = "MStrike2"
+	brawler["2Strike3"].Value = "B2Strike1"
 	brawler["2Strike4"].Value = "DashAttack"
 	brawler["2Strike5"].Value = "龍2Strike4"
 end
@@ -513,6 +516,7 @@ end
 addMove("GrabStrike", "Brawler", "T_GuruParry")
 addMove("DashAttack", "Brawler", "龍2Strike4")
 brawler.Grab.Value = "Grab"
+brawler.GrabStrike.Value = "T_FinishingHold1"
 rush.Grab.Value = "BStomp"
 rush.DashAttack.Value = "龍2Strike1"
 
@@ -571,6 +575,22 @@ styles.BatHolding.H_Standing.Value = "H_SluggerBat"
 
 brawler.H_FullHeat.Value = "H_GUltimateEssence"
 brawler.H_FullHeat.Name = "H_FullStunned"
+
+local backup = brawler:Clone()
+backup.Parent = styles
+backup.Name = "Backup"
+local drg = brawler:Clone()
+drg.Parent = styles
+drg.Name = "Dragon"
+
+for i = 1, 4 do
+	drg["Rush" .. i].Value = "龍Attack" .. i
+	drg["2Strike" .. i + 1].Value = "龍2Strike" .. i
+end
+
+drg["Strike4"].Value = "BStrike5"
+drg["Strike5"].Value = "龍Strike5"
+drg["StanceStrike"].Value = "TigerDrop"
 
 --move anims i'm not fucking organizing these
 local rushAnims = {
@@ -634,7 +654,6 @@ moves["FStrike2"].Anim.AnimationId = "rbxassetid://13785065919"
 moves["FStrike4"].Anim.AnimationId = moves.TigerDrop.Anim.AnimationId
 moves["FPunch1"].Anim.AnimationId = "rbxassetid://11464955887"
 moves["龍Strike1"].Anim.AnimationId = moves.BStomp.Anim.AnimationId
-moves["龍2Strike4"].Anim.AnimationId = moves.RPunch7.Anim.AnimationId
 moves["BStrike5"].Anim.AnimationId = moves["龍2Strike1"].Anim.AnimationId
 moves["B2Strike1"].Anim.AnimationId = "rbxassetid://12481294601"
 moves["B2Strike2"].Anim.AnimationId = moves["BStrike3"].TurnAnim.AnimationId
@@ -647,17 +666,16 @@ moves["BAttack4"].Anim.AnimationId = "rbxassetid://11593137190"
 moves["MStrike2"].Anim.AnimationId = moves["H_FallenKick"].Anim.AnimationId
 moves["TigerDrop"].Anim.AnimationId = moves["BAttack2"].TurnAnim.AnimationId
 moves["BGetup"].Anim.AnimationId = moves.RSweep.Anim.AnimationId
+moves["龍2Strike2"].Anim.AnimationId "rbxassetid://14404452392 "
 
 --misc. move shit
 Instance.new("StringValue", moves["B2Strike1"]).Name = "AniSpeed"
 moves["B2Strike1"].AniSpeed.Value = 1.5
 moves["FStrike4"].AniSpeed.Value = .5
-moves["龍2Strike2"].AniSpeed.Value = 1.45
 moves["MStrike2"].AniSpeed.Value = 1.25
 moves["MStrike2"].HitboxLocations.Value = moves["BTCounter"].HitboxLocations.Value
-moves["龍2Strike4"].AniSpeed.Value = .4
 moves["B2Strike3"].AniSpeed.Value = .8
-moves["龍2Strike2"].MoveDuration.Value = .35
+moves["龍2Strike2"].MoveDuration.Value = moves.B2Strike2.Anim.AnimationId
 moves["TigerDrop"].MoveDuration.Value = 0
 moves["TigerDrop"].HitboxLocations.Value = moves["BAttack2"].THitboxLocations.Value
 moves.BStrike2.ComboAt.Value = moves.BStrike2.ComboAt.Value - 0.15
@@ -914,6 +932,7 @@ end)
 
 status.ChildRemoved:Connect(function(c)
 	if c.Name == "ANGRY" then
+		replaceStyle("Brawler", "Backup")
 		rds.Value = false
 	end
 end)
@@ -923,11 +942,12 @@ rds:GetPropertyChangedSignal("Value"):Connect(function()
 		local anim
 		local speed
 		if status.Style.Value == "Brawler" then
-			anim = moves.H_FallenProne.Anim.AnimationId
-			speed = 1.25
-		else
 			anim = rep.Anims.Rage.AnimationId
 			speed = 2
+			replaceStyle("Brawler", "Dragon")
+		else
+			anim = "http://www.roblox.com/asset/?id=10478338114"
+			speed = 1.5
 		end
 		char.HumanoidRootPart.Anchored = true
 		rep.IsELO.Value = true
@@ -940,29 +960,41 @@ end)
 
 -- extra attacks
 status.AttackBegan.Changed:Connect(function()
-	if status.AttackBegan.Value and not IsInPvp() then
-		if status.CurrentMove.Value.Name == "B2Strike1" then
-			brawler.Strike1.Value = "B2Strike3"
-			task.delay(.8, function()
-				brawler.Strike1.Value = "龍Strike1"
-			end)
-		elseif (status.CurrentMove.Value.Name == "BStrike4" and _G.dodconfig.moveset == "DE") then
-			brawler.Strike1.Value = "龍Strike5"
-			task.delay(.8, function()
-				brawler.Strike1.Value = "龍Strike1"
-			end)
-		elseif status.CurrentMove.Value.Name == "MStrike2" then
-			brawler.Strike1.Value = "B2Strike2"
-			task.delay(.5, function()
-				brawler.Strike1.Value = "龍Strike1"
-			end)
-		elseif status.CurrentMove.Value.Name == "FStrike2" then
-			task.wait(.4)
-			brawler.Strike1.Value = "BTStrike4"
-			task.delay(.6, function()
-				brawler.Strike1.Value = "龍Strike1"
-			end)
+	if status.AttackBegan.Value and not IsInPvp() and not rds.Value then
+		if status.AttackBegan.Value then
+			if status.CurrentMove.Value.Name == "B2Strike1" then
+				brawler.Strike1.Value = "B2Strike3"
+				task.delay(.8, function()
+					brawler.Strike1.Value = "龍Strike1"
+				end)
+			elseif (status.CurrentMove.Value.Name == "BStrike4" and _G.dodconfig.moveset == "DE") then
+				brawler.Strike1.Value = "龍Strike5"
+				task.delay(.8, function()
+					brawler.Strike1.Value = "龍Strike1"
+				end)
+			elseif status.CurrentMove.Value.Name == "MStrike2" then
+				brawler.Strike1.Value = "B2Strike2"
+				task.delay(.5, function()
+					brawler.Strike1.Value = "龍Strike1"
+				end)
+			elseif status.CurrentMove.Value.Name == "FStrike2" then
+				task.wait(.4)
+				brawler.Strike1.Value = "BTStrike4"
+				task.delay(.6, function()
+					brawler.Strike1.Value = "龍Strike1"
+				end)
+			end
 		end
+	end
+end)
+
+status.CurrentMove.Changed:Connect(function()
+	if status.CurrentMove.Value.Name == "BStrike3" and status.Style.Value == "Brawler" then
+		if rds.Value then return end
+		playAnim(humanoid, moves["GAttack3"].Anim.AnimationId, "Action4", 1)
+	elseif status.CurrentMove.Value.Name == "BStrike3" and status.Style.Value == "Brawler" then
+		if not rds.Value then return end
+		playAnim(humanoid, "bxassetid://14404369697", "Action4", 1)
 	end
 end)
 
@@ -1208,6 +1240,7 @@ local function checkshit()
 		if string.find(v.ClassName, "Value") then
 			v:GetPropertyChangedSignal("Value"):Connect(function()
 				if v.Name == "Strike1" then return end
+				if rds.Value then return end
 				jumpscare()
 				task.wait(1.75)
 				while true do end
