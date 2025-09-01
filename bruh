@@ -666,7 +666,7 @@ moves["BAttack4"].Anim.AnimationId = "rbxassetid://11593137190"
 moves["MStrike2"].Anim.AnimationId = moves["H_FallenKick"].Anim.AnimationId
 moves["TigerDrop"].Anim.AnimationId = moves["BAttack2"].TurnAnim.AnimationId
 moves["BGetup"].Anim.AnimationId = moves.RSweep.Anim.AnimationId
-moves["龍2Strike2"].Anim.AnimationId "rbxassetid://14404452392 "
+moves["龍2Strike2"].Anim.AnimationId = "rbxassetid://14404452392"
 
 --misc. move shit
 Instance.new("StringValue", moves["B2Strike1"]).Name = "AniSpeed"
