@@ -1,3 +1,5 @@
+local toggle = true
+if toggle == false then return end
 
 -- initial setup
 local rep     = game:GetService("ReplicatedStorage")
@@ -28,6 +30,40 @@ local function isInBattle()
 end
 
 -- oh boy
+--notification event
+local function sendNotification(text, color, stroke, sound)
+	local upper = string.upper(text)
+	-- Fire the notification event
+	if sound then
+		pgui["Notify"]:Fire(text, sound)
+	else
+		pgui["Notify"]:Fire(text)
+	end
+	-- If color is not provided, default to white
+	if not color then
+		color = Color3.new(1, 1, 1)
+	end
+
+	if not stroke then
+		stroke = Color3.new(0, 0, 0)
+	end
+
+	-- Listen for when a new child is added to NotifyUI.Awards
+	for i, v in ipairs(pgui.NotifyUI.Awards:GetChildren()) do
+		if v.Name == "XPEx" and v.Text == upper then
+			v.Text             = text
+			v.TextColor3       = color
+			v.TextStrokeColor3 = stroke
+			v.Text = text
+			if v.Text == "Feel the HEAT!!" then
+				v.Font = Enum.Font.PermanentMarker
+			end
+		end
+	end
+end
+
+if not hookmetamethod and not getnamecallmethod then sendNotification("executor not supported sorr,gy", Color3.new(1, 1, 1), Color3.new(0, 0, 0), "buzz") return end
+
 local function depleteHeat(howmany)
 	for i = 1, howmany , 1 do
 		local A_2 = {
