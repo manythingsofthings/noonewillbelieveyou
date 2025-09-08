@@ -23,6 +23,13 @@ end
 
 if foundMorph == false then return end
 
+local Anims = char.Humanoid.Animator:GetPlayingAnimationTracks() -- gets all Animations
+
+task.wait(.5)
+for _,animation in Anims do -- Iterates through all Animations
+    animation:Stop() -- stops animations
+end
+
 char.HumanoidRootPart.Anchored = true
 Instance.new("Folder", plr.Status).Name = "Invulnerable"
 
@@ -137,6 +144,8 @@ char.Ignore.Suit_CuffL:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.001, - .4
 
 char.LeftLowerArm.Color = char.Head.Color
 char.RightLowerArm.Color = char.Head.Color
+char.LeftLowerArm.Material = Enum.Material.Air
+char.RightLowerArm.Material = Enum.Material.Air
 
 char.LeftUpperLeg.Material = Enum.Material.Air
 char.RightUpperLeg.Material = Enum.Material.Air
