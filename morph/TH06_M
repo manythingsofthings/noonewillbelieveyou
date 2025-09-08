@@ -23,7 +23,7 @@ end
 
 if foundMorph == false then return end
 
-char.HumanoidRootPart.Anchored = false
+char.HumanoidRootPart.Anchored = true
 Instance.new("Folder", plr.Status).Name = "Invulnerable"
 
 if char:FindFirstChild("Ignore") then char.Ignore:Destroy() end
