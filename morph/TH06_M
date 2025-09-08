@@ -23,6 +23,9 @@ end
 
 if foundMorph == false then return end
 
+char.HumanoidRootPart.Anchored = false
+Instance.new("Folder", plr.Status).Name = "Invulnerable"
+
 if char:FindFirstChild("Ignore") then char.Ignore:Destroy() end
 
 local limbs = {
@@ -138,3 +141,8 @@ char.LeftLowerArm.Material = Enum.Material.Air
 char.RightLowerArm.Material = Enum.Material.Air
 char.LeftLowerArm.Color = char.LeftHand.Color
 char.RightLowerArm.Color = char.LeftHand.Color
+
+
+task.wait(2)
+char.HumanoidRootPart.Anchored = false
+if plr.Status:FindFirstChild("Invulnerable") then plr.Status.Invulnerable:Destroy() end
