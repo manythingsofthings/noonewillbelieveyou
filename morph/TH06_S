@@ -1,0 +1,151 @@
+local rep = game:GetService("ReplicatedStorage")
+local plr = game:GetService("Players").LocalPlayer
+local char = plr.Character
+local hrp = char.HumanoidRootPart
+local pgui = plr.PlayerGui
+local morph = "Legendary Dragon"
+
+local foundMorph = false
+local targetMorph
+
+for _, part in pairs(rep:GetDescendants()) do
+	if part:IsA("MeshPart") and part.Parent.Name == morph then
+		foundMorph = true
+		targetMorph = part.Parent
+	end
+end
+
+for _, part in pairs(char:GetChildren()) do
+	if part:IsA("Accessory") or part:IsA("Shirt") or part:IsA("Pants") then
+		part:Destroy()
+	end
+end
+
+if foundMorph == false then return end
+
+char.HumanoidRootPart.Anchored = true
+Instance.new("Folder", plr.Status).Name = "Invulnerable"
+
+if char:FindFirstChild("Ignore") then char.Ignore:Destroy() end
+
+local limbs = {
+	"LeftUpperArm",
+	"LeftLowerArm",
+	"LeftHand",
+	"RightUpperArm",
+	"RightLowerArm",
+	"RightHand",
+	"LeftUpperLeg",
+	"LeftLowerLeg",
+	"LeftFoot",
+	"RightUpperLeg",
+	"RightLowerLeg",
+	"RightFoot",
+	"Head",
+	"UpperTorso",
+	"LowerTorso",
+}
+
+for _, limb in pairs(limbs) do
+	char[limb].Color = targetMorph[limb].Color
+	if targetMorph[limb].Material ~= Enum.Material.Plastic and targetMorph[limb].Material ~= Enum.Material.SmoothPlastic then
+		char[limb].Material = targetMorph[limb].Material
+	else	
+		char[limb].Material = Enum.Material.Air
+	end
+	
+	for _, part in pairs(char[limb]:GetChildren()) do
+		if part:IsA("Decal") then
+			part:Destroy()
+		end
+	end
+	
+	for _, part in pairs(targetMorph[limb]:GetChildren()) do
+		if part:IsA("Decal") then
+			part:Clone().Parent = char[limb]
+		end
+	end
+	
+	char[limb].Size = targetMorph[limb].Size
+	
+	local charmotor6d = char[limb]:FindFirstChildOfClass("Motor6D")
+	local targetmotor6d = targetMorph[limb]:FindFirstChildOfClass("Motor6D")
+	if charmotor6d and targetmotor6d then
+		charmotor6d.C0 = targetmotor6d.C0 
+		charmotor6d.C1 = targetmotor6d.C1 
+	end
+end
+
+char.LowerTorso.Root.C0 = targetMorph.LowerTorso.Root.C0
+char.LowerTorso.Root.C1 = targetMorph.LowerTorso.Root.C1 
+
+char.Humanoid.HipHeight = (targetMorph.HumanoidRootPart.Size.Y / 2) - 1
+
+if targetMorph:FindFirstChild("Ignore") then
+	local targetIgnore = targetMorph.Ignore:Clone()
+	targetIgnore.Parent = char
+	for _, part in pairs(targetIgnore:GetChildren()) do
+		local weld = part:FindFirstChildOfClass("Weld")
+		weld.Part0 = char[weld.Part0.Name]
+	end
+end
+
+local beret = char.Ignore.Kiryu_Tail
+beret.MeshId = "rbxassetid://112484822124794"
+beret.TextureID = "rbxassetid://73654298363128"
+beret.Size = Vector3.new(1, .25, .5)
+local hair1 = char.Ignore.Kiryu_Hair
+hair1.Mesh.MeshId = "rbxassetid://98840641880864"
+hair1.Mesh.TextureId = "http://www.roblox.com/asset/?id=112518187638329"
+hair1.Parent = beret.Parent
+hair1.Mesh.Offset = Vector3.new(0, -.5, .25)
+hair1.Mesh.VertexColor = Vector3.new(1,1,1)
+local hair2 = hair1:Clone()
+hair2.Mesh.MeshId = "rbxassetid://114893135115368"
+hair2.Mesh.TextureId = "http://www.roblox.com/asset/?id=77488583379407"
+hair2.Parent = beret.Parent
+hair2.Mesh.Offset = Vector3.new(0, -.5, -.25)
+
+char.Head.face.Texture = "http://www.roblox.com/asset/?id=14002876527"
+
+beret:FindFirstChildOfClass("Weld").C1 = CFrame.new(0, .35, 0)
+beret:FindFirstChildOfClass("Weld").C1 = beret:FindFirstChildOfClass("Weld").C1 * CFrame.Angles(0, math.rad(270), 0)
+
+Instance.new("Pants", char).PantsTemplate = "http://www.roblox.com/asset/?id=15082180902"
+
+local remove = {
+	char.Ignore.Kiryu_Suit,
+	char.Ignore.Kiryu_Belt,
+	char.Ignore.Kiryu_Shirt,
+	char.Ignore.Kiryu_Skin,
+	char.Ignore.Kiryu_Buttons,
+	char.Ignore.Kiryu_BeltLoop,
+	char.Ignore.Suit_CuffSR,
+	char.Ignore.Suit_CuffSL,
+	char.Ignore.Suit_PantL,
+	char.Ignore.Suit_PantR
+}
+
+for _, v in ipairs(remove) do
+	v:Destroy()
+end
+
+char.Ignore.Suit_CuffR:FindFirstChildOfClass("Weld").Part0 = char.RightUpperArm
+char.Ignore.Suit_CuffL:FindFirstChildOfClass("Weld").Part0 = char.LeftUpperArm
+char.Ignore.Suit_CuffR:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.012, - .45, - .002)
+char.Ignore.Suit_CuffL:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.001, - .45, - .002)
+
+char.LeftLowerArm.Color = char.Head.Color
+char.RightLowerArm.Color = char.Head.Color
+
+char.LeftUpperLeg.Material = Enum.Material.Air
+char.RightUpperLeg.Material = Enum.Material.Air
+char.LeftUpperLeg.Color = char.LeftHand.Color
+char.RightUpperLeg.Color = char.LeftHand.Color
+
+char.LeftFoot.BrickColor = BrickColor.new("Brown")
+char.RightFoot.BrickColor = BrickColor.new("Brown")
+
+task.wait(2)
+char.HumanoidRootPart.Anchored = false
+if plr.Status:FindFirstChild("Invulnerable") then plr.Status.Invulnerable:Destroy() end
