@@ -21,9 +21,9 @@ for _, part in pairs(char:GetChildren()) do
 	end
 end
 
-if foundMorph == false then return end
+if foundMorph == true then return end
 
-char.HumanoidRootPart.Anchored = true
+char.HumanoidRootPart.Anchored = false
 Instance.new("Folder", plr.Status).Name = "Invulnerable"
 
 if char:FindFirstChild("Ignore") then char.Ignore:Destroy() end
@@ -90,33 +90,31 @@ if targetMorph:FindFirstChild("Ignore") then
 	end
 end
 
-local beret = char.Ignore.Kiryu_Hair
-beret.Mesh.MeshId = "rbxassetid://15612556635"
-beret.Mesh.TextureId = "rbxassetid://15612558735"
-beret.Mesh.Offset = Vector3.new(0, .5, 0)
-beret.Mesh.VertexColor = Vector3.new(1,1,1)
-local hair1 = beret:Clone()
-hair1.Mesh.MeshId = "rbxassetid://13556307008"
-hair1.Mesh.TextureId = "http://www.roblox.com/asset/?id=13335165334"
+local beret = char.Ignore.Kiryu_Tail
+beret.MeshId = "rbxassetid://112484822124794"
+beret.TextureID = "rbxassetid://73654298363128"
+beret.Size = Vector3.new(1, .25, .5)
+local hair1 = char.Ignore.Kiryu_Hair
+hair1.Mesh.MeshId = "rbxassetid://98840641880864"
+hair1.Mesh.TextureId = "http://www.roblox.com/asset/?id=112518187638329"
 hair1.Parent = beret.Parent
-hair1.Mesh.Offset = Vector3.new(.05, - 1, 0)
+hair1.Mesh.Offset = Vector3.new(0, -.5, .25)
 hair1.Mesh.VertexColor = Vector3.new(1,1,1)
-local hair2 = beret:Clone()
-hair2.Mesh.MeshId = "rbxassetid://13813808731"
-hair2.Mesh.TextureId = "http://www.roblox.com/asset/?id=13335165334"
+local hair2 = hair1:Clone()
+hair2.Mesh.MeshId = "rbxassetid://114893135115368"
+hair2.Mesh.TextureId = "http://www.roblox.com/asset/?id=77488583379407"
 hair2.Parent = beret.Parent
-hair2.Mesh.Offset = Vector3.new(.05, - 1, 0)
-hair2.Mesh.VertexColor = Vector3.new(1,1,1)
+hair2.Mesh.Offset = Vector3.new(0, -.5, -.25)
 
-char.Head.face.Texture = "http://www.roblox.com/asset/?id=66329905"
+char.Head.face.Texture = "http://www.roblox.com/asset/?id=14002876527"
 
-hair2:FindFirstChildOfClass("Weld").C1 = hair2:FindFirstChildOfClass("Weld").C1 * CFrame.Angles(0, math.rad(180), 0)
+beret:FindFirstChildOfClass("Weld").C1 = CFrame.new(0, .35, 0)
+beret:FindFirstChildOfClass("Weld").C1 = beret:FindFirstChildOfClass("Weld").C1 * CFrame.Angles(0, math.rad(270), 0)
 
-Instance.new("Pants", char).PantsTemplate = "http://www.roblox.com/asset/?id=9651684388"
+Instance.new("Pants", char).PantsTemplate = "http://www.roblox.com/asset/?id=15082180902"
 
 local remove = {
 	char.Ignore.Kiryu_Suit,
-	char.Ignore.Kiryu_Tail,
 	char.Ignore.Kiryu_Belt,
 	char.Ignore.Kiryu_Shirt,
 	char.Ignore.Kiryu_Skin,
@@ -124,6 +122,8 @@ local remove = {
 	char.Ignore.Kiryu_BeltLoop,
 	char.Ignore.Suit_CuffSR,
 	char.Ignore.Suit_CuffSL,
+	char.Ignore.Suit_PantL,
+	char.Ignore.Suit_PantR
 }
 
 for _, v in ipairs(remove) do
@@ -132,16 +132,21 @@ end
 
 char.Ignore.Suit_CuffR:FindFirstChildOfClass("Weld").Part0 = char.RightUpperArm
 char.Ignore.Suit_CuffL:FindFirstChildOfClass("Weld").Part0 = char.LeftUpperArm
-char.Ignore.Suit_CuffR:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.012, - .511, - .002)
-char.Ignore.Suit_CuffL:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.001, - .511, - .002)
-char.Ignore.Suit_PantL:FindFirstChildOfClass("Weld").C1 = CFrame.new(0, - .25, 0)
-char.Ignore.Suit_PantR:FindFirstChildOfClass("Weld").C1 = CFrame.new(0, - .25, 0)
+char.Ignore.Suit_CuffR:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.012, - .45, - .002)
+char.Ignore.Suit_CuffL:FindFirstChildOfClass("Weld").C0 = CFrame.new(0.001, - .45, - .002)
 
+char.LeftLowerArm.Color = char.Head.Color
+char.RightLowerArm.Color = char.Head.Color
 char.LeftLowerArm.Material = Enum.Material.Air
 char.RightLowerArm.Material = Enum.Material.Air
-char.LeftLowerArm.Color = char.LeftHand.Color
-char.RightLowerArm.Color = char.LeftHand.Color
 
+char.LeftUpperLeg.Material = Enum.Material.Air
+char.RightUpperLeg.Material = Enum.Material.Air
+char.LeftUpperLeg.Color = char.LeftHand.Color
+char.RightUpperLeg.Color = char.LeftHand.Color
+
+char.LeftFoot.BrickColor = BrickColor.new("Brown")
+char.RightFoot.BrickColor = BrickColor.new("Brown")
 
 task.wait(2)
 char.HumanoidRootPart.Anchored = false
