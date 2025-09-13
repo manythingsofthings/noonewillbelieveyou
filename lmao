@@ -78,34 +78,35 @@ local function depleteHeat(howmany)
 end
 
 function checkArgs(args)
-	if status.Settings.Difficulty.Value ~= "Legend" then return args end
+	if status.Settings.Difficulty.Value ~= "Legend" then return end
 	if typeof(args[1]) == "table" then
 		if args[1][1] == "damage" then
 			if args[1][3] == hrp then
-				if string.find(args[1][5].Name, "Strike") or string.find(args[1][5].Name, "kPunch") then
-					if string.find(args[1][5].Name, "Strike1") or string.find(args[1][5].Name, "Stomp") then return args end
-					args[1][5] = moves["HueDrop"]
+				if string.find(args[1][5].Name, "Drop") and args[1][5] ~= moves.HueDrop then return end
+				
+				for i = 1, 4 do
+					if args[1][2].Parent.Name:sub(1, 4) == "wep_" then return end
+				end
+				
+				if string.find(args[1][5].Name, "Strike") or string.find(args[1][5].Name, "kPunch") or string.find(args[1][5].Name, "GAttack") or string.find(args[1][5].Name, "Charge") then
+					if string.find(args[1][5].Name, "Strike1") then return end
+					args[1][5] = moves["BTCounter"]
 				elseif args[1][5] == moves.HueDrop or args[1][5] == moves.GoAway then
 					args[1][5] = moves["TigerDrop"]
-				elseif args[1][5] == moves.ParkerDrop or args[1][5] == moves.DerekCharge then
+				elseif args[1][5] == moves.ParkerDrop then
 					args[1][5] = moves["龍TigerDrop"]
 				elseif args[1][5] == moves["龍TigerDrop"] then
 					args[1][5] = moves["龍GTigerDrop"]
-				elseif string.find(args[1][5].Name, "GStrike") then
-					args[1][5] = moves["BTStrike3"]
-				elseif not string.find(args[1][5].Name, "P_") and not string.find(args[1][5].Name, "Prop") and not string.find(args[1][5].Name, "MA") and not string.find(args[1][5].Name, "MM") and not string.find(args[1][5].Name, "MS") then
+				else
 					args[1][5] = moves["BTPunch1"]
 				end
 			else
-				if not string.find(args[1][5].Name, "P_") and not string.find(args[1][5].Name, "Prop") and not string.find(args[1][5].Name, "MA") and not string.find(args[1][5].Name, "MM") and not string.find(args[1][5].Name, "MS") then
-					if string.find(args[1][5].Name, "Attack") or string.find(args[1][5].Name, "Strike1") then
-						args[1][5] = moves["RStrike1"]
-					elseif string.find(args[1][5].Name, "Strike") then
-						args[1][5] = moves["RStrike2"]
-					elseif string.find(args[1][5].Name, "Drop") or string.find(args[1][5].Name, "Hook") then
-						if args[1][3].Parent.Name == "Legendary Dragon" then return args end
-						args[1][5] = moves["BStrike4"]
-					end
+				if string.find(args[1][5].Name, "Attack") or string.find(args[1][5].Name, "Strike1") then
+					args[1][5] = moves["RStrike1"]
+				elseif string.find(args[1][5].Name, "Strike") then
+					args[1][5] = moves["RStrike2"]
+				elseif string.find(args[1][5].Name, "Drop") or string.find(args[1][5].Name, "Hook") then
+					args[1][5] = moves["BStrike4"]
 				end
 			end
 		end
@@ -143,7 +144,6 @@ end
 
 -- heat drain
 status.CurrentMove.Changed:Connect(function()
-	if status.Settings.Difficulty.Value ~= "Legend" then return end
 	if string.find(status.CurrentMove.Value.Name, "2Strike") then
 		depleteHeat(4)
 	end
@@ -151,7 +151,7 @@ end)
 
 local function fiveSecDrain()
 	while true do
-		if isInBattle() and status.Settings.Difficulty.Value == "Legend" then
+		if isInBattle() then
 			depleteHeat(1)
 		end
 		task.wait(3)
