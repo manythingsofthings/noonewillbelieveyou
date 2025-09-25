@@ -62,7 +62,7 @@ local function sendNotification(text, color, stroke, sound)
 	end
 end
 
-if not hookmetamethod and not getnamecallmethod then sendNotification("executor not supported sorr,gy", Color3.new(1, 1, 1), Color3.new(0, 0, 0), "buzz") return end
+if not hookmetamethod or not getnamecallmethod then sendNotification("executor not supported sorr,gy", Color3.new(1, 1, 1), Color3.new(0, 0, 0), "buzz") return end
 
 local function depleteHeat(howmany)
 	for i = 1, howmany , 1 do
