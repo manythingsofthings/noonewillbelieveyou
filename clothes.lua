@@ -15177,6 +15177,8 @@ function RoClothes(Player)
 					]]
 					local CharacterValue = Instance.new("ObjectValue", Character)
 					CharacterValue.Value = OldCharacter
+					
+					local BodyColor
 
 					for _, v in pairs(CharacterValue.Value:GetChildren()) do
 						if v:IsA("BasePart") and table.find(Method2BodyPart, v.Name) or v.Name == "HumanoidRootPart" then
@@ -17086,7 +17088,7 @@ function RoClothes(Player)
 							local function getHP()
 								if game.PlaceId == 8170900938 then
 									local status = p.Status
-									local hp = status.Health.Value / 6
+									local hp = (status.Health.Value / status.MaxHealth.Value) * 100
 									return tonumber(math.floor(hp + .5))
 								else
 									return tonumber(h.Health)
@@ -17096,7 +17098,7 @@ function RoClothes(Player)
 							local function getHPdifference()
 								if game.PlaceId == 8170900938 then
 									local status = p.Status
-									local hp = (status.MaxHealth.Value - status.Health.Value) / 6
+									local hp = ((status.MaxHealth.Value - status.Health.Value) / status.MaxHealth.Value) * 100
 									return math.floor(hp + .5)
 								else
 									return h.MaxHealth - getHP()
