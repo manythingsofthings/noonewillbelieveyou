@@ -19586,17 +19586,16 @@ function RoClothes(Player)
 		end
 		
 		local function checkBundle(v)
-
+			if not v then
+				return
+			end
+			
 			if v.ClearClothing and v.ClearClothing == true then
-
 				PlayerData[SelectPlayer].CurrentClothes = {}
-
 			end
 
 			if v.Preset then
-
 				if v.Preset["CatalogUsername"] or v.Preset["CatalogAccessory"] then
-
 					if GUIObject.Catalog_3:FindFirstChild(SelectPlayer) then
 						for i, v in pairs(GUIObject.Catalog_3:FindFirstChild(SelectPlayer):GetChildren()) do
 							if not v:IsA("UIGridLayout") and not table.find(PlayerData[SelectPlayer].CatalogAccessory,tonumber(v.Name)) then
@@ -19604,7 +19603,6 @@ function RoClothes(Player)
 							end
 						end
 					end
-
 				end
 
 				for setting, value in pairs(v.Preset) do
@@ -19751,7 +19749,9 @@ function RoClothes(Player)
 							PlayerData[SelectPlayer].ClothesHP[v] = {["HP"]=Clothes[v].HP,["Inverse"]=false}
 						end
 					end
-
+					
+					print(Clothes[v])
+					
 					for i, c in pairs(Clothes[v].Weld) do -- CHANGE here
 						if PartList[c] and PartList[c].Recolor then
 							if not PlayerData[SelectPlayer].ClothesRecolor[v] then
