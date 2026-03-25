@@ -1,137 +1,10 @@
---[[	
-
-	/ ＲＯＣＬＯＴＨＥＳ
-	Version - 0.7.9:lerp()
-	Mod's Discord - discord.gg/k2HbJMY6Fr
-	Unknowing's Discord - discord.gg/HBzvWE6Rp3
-	
-	| This script requires a LOCAL folder "RClothesContent" to be added in ROBLOX's content folder, or it'll self-destruct itself
-	
-	| RoClothes is a Client-Sided Exploiting Script, that allows the player to have nude BodyParts/Clothes
-	Can be used on any executor
-	
-	| This script WILL cause FPS drops, because of BodyParts/Clothes meshes inside the Player model
-	
-	| 𝐔𝐒𝐄 𝐀𝐓 𝐘𝐎𝐔𝐑 𝐎𝐖𝐍 𝐑𝐈𝐒𝐊
-	| 𝐖𝐎𝐑𝐊 𝐈𝐍 𝐏𝐑𝐎𝐆𝐑𝐄𝐒𝐒
-	
-	The original developer of RoClothes is no longer working on this script.
-	This is a MODDED version of this script that might or might not be updated.
-	If you know who the creator of this mod is, feel free to make requests or suggest some things.
-	
-	
-	
-	original version 0.7
-	local version 0.7.9:lerp()
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-]]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 local PS = game:GetService("Players")
 local RS = game:GetService("RunService")
 local HS = game:GetService("HttpService")
 
 function RoClothes(Player)
 	print("RoCC")
-
-	--[[
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-
-                                      ██╗░░░░░░█████╗░░█████╗░░█████╗░██╗░░░░░
-                                      ██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║░░░░░
-                                      ██║░░░░░██║░░██║██║░░╚═╝███████║██║░░░░░
-                                      ██║░░░░░██║░░██║██║░░██╗██╔══██║██║░░░░░
-                                      ███████╗╚█████╔╝╚█████╔╝██║░░██║███████╗
-                                      ╚══════╝░╚════╝░░╚════╝░╚═╝░░╚═╝╚══════╝
-                                  
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
-	]]
-
+	
 	local GUIObject = {}
 
 	GUIObject.Screen = Instance.new("ScreenGui")
@@ -12142,7 +12015,7 @@ function RoClothes(Player)
 	end
 
 	function Function.ShirtTexture(ObjectInstance, Character, Extra, Data)	
-		if Extra.Shirt and table.find(PlayerData[Data].CurrentClothes, "Roblox Shirt") then
+		if Extra.Shirt and Extra.Shirt.ShirtTemplate and table.find(PlayerData[Data].CurrentClothes, "Roblox Shirt") then
 			if ObjectInstance.Material == Enum.Material.Glass then
 				ObjectInstance.TextureID = Extra.Shirt.ShirtTemplate
 			else
@@ -12153,7 +12026,7 @@ function RoClothes(Player)
 	end
 
 	function Function.PantsTexture(ObjectInstance, Character, Extra, Data)
-		if Extra.Pants and table.find(PlayerData[Data].CurrentClothes, "Roblox Pants") then
+		if Extra.Pants and Extra.Pants.PantsTemplate and table.find(PlayerData[Data].CurrentClothes, "Roblox Pants") then
 			if ObjectInstance.Material == Enum.Material.Glass then
 				ObjectInstance.TextureID = Extra.Pants.PantsTemplate
 			else
@@ -12164,7 +12037,7 @@ function RoClothes(Player)
 	end
 
 	function Function.TorsoShirtTexture(ObjectInstance, Character, Extra, Data)
-		if Extra.Shirt and (table.find(PlayerData[Data].CurrentClothes, "Roblox Shirt") or table.find(PlayerData[Data].CurrentClothes, "New Woman") or table.find(PlayerData[Data].CurrentClothes, "Roblox Breasts Clothing")) then
+		if Extra.Shirt and Extra.Shirt.ShirtTemplate and (table.find(PlayerData[Data].CurrentClothes, "Roblox Shirt") or table.find(PlayerData[Data].CurrentClothes, "New Woman") or table.find(PlayerData[Data].CurrentClothes, "Roblox Breasts Clothing")) then
 			if ObjectInstance.Material == Enum.Material.Glass or ObjectInstance:HasTag("RCGlassMat") then
 				ObjectInstance.TextureID = Extra.Shirt.ShirtTemplate
 				if ObjectInstance.Transparency < 1 then
@@ -12180,7 +12053,7 @@ function RoClothes(Player)
 	end
 
 	function Function.TorsoPantsTexture(ObjectInstance, Character, Extra, Data)
-		if Extra.Pants and (table.find(PlayerData[Data].CurrentClothes, "Roblox Pants")) then
+		if Extra.Pants and Extra.Pants.PantsTemplate and (table.find(PlayerData[Data].CurrentClothes, "Roblox Pants")) then
 			if ObjectInstance.Material == Enum.Material.Glass or ObjectInstance:HasTag("RCGlassMat") then
 				ObjectInstance.TextureID = Extra.Pants.PantsTemplate
 				if ObjectInstance.Transparency < 1 then
@@ -12467,12 +12340,14 @@ function RoClothes(Player)
 						s:SetAttribute("MaxTransparenyRC",1)
 					end
 				else
-					if v.Name == "Torso Shirt" then
-						v:SetAttribute("maxDeterminedRC",false)
-						v:SetAttribute("MaxTransparenyRC",nil)
-						v.Transparency = v.Parent.Transparency
+					if PData.HPClothes.Shirt ~= "" and not tonumber(PData.HPClothes.Shirt) then
+						if v.Name == "Torso Shirt" then
+							v:SetAttribute("maxDeterminedRC",false)
+							v:SetAttribute("MaxTransparenyRC",nil)
+							v.Transparency = v.Parent.Transparency
+						end
+						Function.TorsoShirtTexture(v,nil,{Shirt = PData.HPClothes.Shirt},Data)
 					end
-					Function.TorsoShirtTexture(v,nil,{Shirt = PData.HPClothes.Shirt},Data)
 				end
 			end
 
@@ -14311,7 +14186,7 @@ function RoClothes(Player)
 			local amountFinished = 0
 			for _, Id in pairs(AccessoryList) do
 				task.spawn(function()
-					local success = pcall(function()
+					local success, output = pcall(function()
 						local AccessoryInfo = MPS:GetProductInfo(Id)
 						local Type = AccessoryType[AccessoryInfo.AssetTypeId]
 
@@ -14322,7 +14197,7 @@ function RoClothes(Player)
 						end
 					end)
 					if not success then
-						warn('Accessory ID "'..Id..'" is invalid. Please make sure ID is an ACCESSORY and is not content deleted.' )
+						warn('Accessory ID "'..Id..'" is invalid. Please make sure ID is an ACCESSORY and is not content deleted. ('.. output .. ")")
 					else
 						IsAdded = true
 					end
@@ -15108,14 +14983,26 @@ function RoClothes(Player)
 	end
 
 	function Function.CharacterExecute(Character, Data, bool)
-
 		if Character then
-
 			local Human = Character:FindFirstChildOfClass("Humanoid")
 			local Head = Character:FindFirstChild("Head")
 			local FaceDecal = Head and (Head:FindFirstChild("face") or Head:FindFirstChild("Face"))
 			if not Human then
 				return
+			end
+			
+			local function getHP()
+				local result, maxResult = Human.Health, Human.MaxHealth
+				
+				if game.PlaceId == 8170900938 then
+					result = (Player.Status.Health.Value / Player.Status.MaxHealth.Value) * 100
+					maxResult = 100
+				end
+				
+				return {
+					result,
+					maxResult
+				}
 			end
 
 			Function.CharacterReset(Character)
@@ -15136,7 +15023,7 @@ function RoClothes(Player)
 			local CharacterAttachment = Function.CharacterFunction(Character, Data)
 
 			if Human then
-				DataDetail.SavedPreviousHP = Human.Health
+				DataDetail.SavedPreviousHP = getHP()[1]
 				if DataDetail.TopHP ~= "" then
 					DataDetail.SavedTopHP = DataDetail.TopHP
 				end
@@ -15177,8 +15064,6 @@ function RoClothes(Player)
 					]]
 					local CharacterValue = Instance.new("ObjectValue", Character)
 					CharacterValue.Value = OldCharacter
-					
-					local BodyColor
 
 					for _, v in pairs(CharacterValue.Value:GetChildren()) do
 						if v:IsA("BasePart") and table.find(Method2BodyPart, v.Name) or v.Name == "HumanoidRootPart" then
@@ -16386,8 +16271,6 @@ function RoClothes(Player)
 								end
 							end
 						end
-						
-						env.writefile("RClothesLerp/BundleLoader.json", HS:JSONEncode(tab))
 
 						if #filesFound > 0 then
 							toJSON(tab)
@@ -17086,23 +16969,17 @@ function RoClothes(Player)
 							local h = chr:FindFirstChildOfClass("Humanoid")
 							
 							local function getHP()
+								local result, maxResult = h.Health, h.MaxHealth
+								
 								if game.PlaceId == 8170900938 then
-									local status = p.Status
-									local hp = (status.Health.Value / status.MaxHealth.Value) * 100
-									return tonumber(math.floor(hp + .5))
-								else
-									return tonumber(h.Health)
+									result = (p.Status.Health.Value / p.Status.MaxHealth.Value) * 100
+									maxResult = 100
 								end
-							end
-							
-							local function getHPdifference()
-								if game.PlaceId == 8170900938 then
-									local status = p.Status
-									local hp = ((status.MaxHealth.Value - status.Health.Value) / status.MaxHealth.Value) * 100
-									return math.floor(hp + .5)
-								else
-									return h.MaxHealth - getHP()
-								end
+								
+								return {
+									result,
+									maxResult
+								}
 							end
 							
 							if Method == 2 and Method2CharacterFolder:FindFirstChild(PlayerName) then
@@ -17123,7 +17000,7 @@ function RoClothes(Player)
 								end
 								-- top --
 								if PData.TopHP ~= "" and 
-									(PData.HardcoreHP == false and getHPdifference() >= PData.TopHP or 
+									(PData.HardcoreHP == false and getHP()[2]-getHP()[1] >= PData.TopHP or 
 										PData.HardcoreHP == true and PData.SavedTopHP <= 0
 									) then
 									if PData.TopRipped == false then
@@ -17247,7 +17124,7 @@ function RoClothes(Player)
 										end
 									end
 								elseif PData.TopHP ~= "" and 
-									(PData.HardcoreHP == false and getHPdifference() < PData.TopHP or
+									(PData.HardcoreHP == false and getHP()[2]-getHP()[1] < PData.TopHP or
 										PData.HardcoreHP == true and PData.SavedTopHP > 0
 									) then
 									if PData.TopRipped == true then
@@ -17372,7 +17249,7 @@ function RoClothes(Player)
 								end
 								-- bottom --
 								if PData.BottomHP ~= "" and 
-									(PData.HardcoreHP == false and getHPdifference() >= PData.BottomHP or
+									(PData.HardcoreHP == false and getHP()[2]-getHP()[1] >= PData.BottomHP or
 										PData.HardcoreHP == true and PData.SavedBottomHP <= 0
 									) then
 									if PData.BottomRipped == false then
@@ -17496,7 +17373,7 @@ function RoClothes(Player)
 										end
 									end
 								elseif PData.BottomHP ~= "" and 
-									(PData.HardcoreHP == false and getHPdifference() < PData.BottomHP or
+									(PData.HardcoreHP == false and getHP()[2]-getHP()[1] < PData.BottomHP or
 										PData.HardcoreHP == true and PData.SavedBottomHP > 0
 									) then
 									if PData.BottomRipped == true then
@@ -17616,9 +17493,9 @@ function RoClothes(Player)
 									end
 								end
 
-								if (PData.SavedPreviousHP-getHP()) > 0 and PData.HardcoreHP == true then
-									PData.SavedTopHP = math.max(PData.SavedTopHP-(PData.SavedPreviousHP-getHP()),0)
-									PData.SavedBottomHP = math.max(PData.SavedBottomHP-(PData.SavedPreviousHP-getHP()),0)
+								if (PData.SavedPreviousHP-getHP()[1]) > 0 and PData.HardcoreHP == true then
+									PData.SavedTopHP = math.max(PData.SavedTopHP-(PData.SavedPreviousHP-getHP()[1]),0)
+									PData.SavedBottomHP = math.max(PData.SavedBottomHP-(PData.SavedPreviousHP-getHP()[1]),0)
 									if PData["Healing"] == true then
 										PData["Healing"] = false
 										GUIObject.repairDisplay.Color = ColorSequence.new(
@@ -17630,8 +17507,8 @@ function RoClothes(Player)
 										repairTween:Play()
 									end
 								end
-								if PData.DamageSFX ~= "" and getHP() < PData.SavedPreviousHP then
-									if (PData.SavedPreviousHP-getHP()) >= tonumber(PData.DamageSFX) then
+								if PData.DamageSFX ~= "" and getHP()[1] < PData.SavedPreviousHP then
+									if (PData.SavedPreviousHP-getHP()[1]) >= PData.DamageSFX then
 										if UIS.KeyboardEnabled then
 											local audio = Instance.new("Sound",chr.PrimaryPart)
 											audio.SoundId = "rbxasset://RClothesContent/Sound/Moan/".. math.random(1,8) ..".ogg"
@@ -17648,7 +17525,7 @@ function RoClothes(Player)
 										end
 									end
 								end
-								PData.SavedPreviousHP = getHP()
+								PData.SavedPreviousHP = getHP()[1]
 								if PData.HardcoreHP == true then
 									if PData.TopHP ~= "" then
 										GUIObject.topHPDisplay.Text = math.clamp(math.round((PData.SavedTopHP/PData.TopHP)*100),0,100).."%"
@@ -17664,14 +17541,14 @@ function RoClothes(Player)
 									end
 								else
 									if PData.TopHP ~= "" then
-										GUIObject.topHPDisplay.Text = math.clamp(math.round((1-(getHPdifference())/PData.TopHP)*100),0,100).."%"
-										GUIObject.topHPDisplay.TextColor3 = Color3.new(1-(1-(getHPdifference())/PData.TopHP),(1-(getHPdifference())/PData.TopHP),0)
+										GUIObject.topHPDisplay.Text = math.clamp(math.round((1-(getHP()[2]-getHP()[1])/PData.TopHP)*100),0,100).."%"
+										GUIObject.topHPDisplay.TextColor3 = Color3.new(1-(1-(getHP()[2]-getHP()[1])/PData.TopHP),(1-(getHP()[2]-getHP()[1])/PData.TopHP),0)
 									else
 										GUIObject.topHPDisplay.Text = ""
 									end
 									if PData.BottomHP ~= "" then
-										GUIObject.bottomHPDisplay.Text = math.clamp(math.round((1-(getHPdifference())/PData.BottomHP)*100),0,100).."%"
-										GUIObject.bottomHPDisplay.TextColor3 = Color3.new(1-(1-(getHPdifference())/PData.BottomHP),(1-(getHPdifference())/PData.BottomHP),0)
+										GUIObject.bottomHPDisplay.Text = math.clamp(math.round((1-(getHP()[2]-getHP()[1])/PData.BottomHP)*100),0,100).."%"
+										GUIObject.bottomHPDisplay.TextColor3 = Color3.new(1-(1-(getHP()[2]-getHP()[1])/PData.BottomHP),(1-(getHP()[2]-getHP()[1])/PData.BottomHP),0)
 									else
 										GUIObject.bottomHPDisplay.Text = ""
 									end
@@ -19586,16 +19463,17 @@ function RoClothes(Player)
 		end
 		
 		local function checkBundle(v)
-			if not v then
-				return
-			end
-			
+
 			if v.ClearClothing and v.ClearClothing == true then
+
 				PlayerData[SelectPlayer].CurrentClothes = {}
+
 			end
 
 			if v.Preset then
+
 				if v.Preset["CatalogUsername"] or v.Preset["CatalogAccessory"] then
+
 					if GUIObject.Catalog_3:FindFirstChild(SelectPlayer) then
 						for i, v in pairs(GUIObject.Catalog_3:FindFirstChild(SelectPlayer):GetChildren()) do
 							if not v:IsA("UIGridLayout") and not table.find(PlayerData[SelectPlayer].CatalogAccessory,tonumber(v.Name)) then
@@ -19603,6 +19481,7 @@ function RoClothes(Player)
 							end
 						end
 					end
+
 				end
 
 				for setting, value in pairs(v.Preset) do
@@ -19749,9 +19628,7 @@ function RoClothes(Player)
 							PlayerData[SelectPlayer].ClothesHP[v] = {["HP"]=Clothes[v].HP,["Inverse"]=false}
 						end
 					end
-					
-					print(Clothes[v])
-					
+
 					for i, c in pairs(Clothes[v].Weld) do -- CHANGE here
 						if PartList[c] and PartList[c].Recolor then
 							if not PlayerData[SelectPlayer].ClothesRecolor[v] then
